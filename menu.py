@@ -42,6 +42,13 @@ class Menu:
                                     self.game.state = 1
                                 case "level 1":
                                     self.game.state = 4
+                                case "class 1":
+                                    self.game.state = 5
+                                    self.game.class_choice = 1
+                                case "class 2":
+                                    self.game.state = 5
+                                    self.game.class_choice = 2
+
                         self.game.in_menu = False
 
 
@@ -84,3 +91,11 @@ class OptionsMenu(Menu):
         back = Button(self.game.display, (50, 600), (250, 100), 'back')
         self.elements.add(title, back)
 
+
+class ClassMenu(Menu):
+    def __init__(self, game):
+        super().__init__(game)
+        title = Label(self.game.display, (540, 100), (200, 100), 'Pick Your Class')
+        class1 = Button(self.game.display, (540, 410), (200, 100), 'class 1')
+        class2 = Button(self.game.display, (540, 510), (200, 100), 'class 2')
+        self.elements.add(title, class1, class2)

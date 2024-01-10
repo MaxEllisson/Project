@@ -127,3 +127,9 @@ class Ball(Weapons):
         self.center = pygame_util.to_pygame(self.ball.position, self.display)
         pg.draw.circle(self.display, 'blue', self.center, self.radius + 1)
 
+    def launch(self, shot_power):
+        self.ball.apply_impulse_at_local_point(shot_power * Vec2d(1, 0))
+
+
+class Enemy(pg.sprite.Sprite):
+    pass

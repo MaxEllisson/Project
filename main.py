@@ -1,6 +1,6 @@
 import pygame as pg
 import pymunk as pm
-from menu import StartMenu, LevelMenu, OptionsMenu
+from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu
 from levels import Level1
 
 
@@ -11,11 +11,13 @@ class Game:
         self.in_game = True
         self.display = pg.display.set_mode((1280, 720))
         self.clock = pg.time.Clock()
+        self.class_choice = None
         self.states = {
             1: StartMenu(self),
             2: LevelMenu(self),
             3: OptionsMenu(self),
-            4: Level1(self)
+            4: ClassMenu(self),
+            5: Level1(self)
         }
         self.state = 1
 
