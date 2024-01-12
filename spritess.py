@@ -102,6 +102,16 @@ class Block(pg.sprite.Sprite):
         pg.draw.polygon(self.display, 'blue', vertex)
 
 
+class Sliders(pg.sprite.Sprite):
+    def __init__(self, display, pos, size, maximum, minimum):
+        pg.sprite.Sprite.__init__(self)
+        self.display = display
+        self.pos = pos
+        self.size = size
+        self.maximum = maximum
+        self.minimum = minimum
+
+
 class Weapons(pg.sprite.Sprite):
     def __init__(self, display, pos: Vec2d, radius, space, mass, friction, elasticity):
         pg.sprite.Sprite.__init__(self)
@@ -122,6 +132,7 @@ class Ball(Weapons):
         super().__init__(display, pos, radius, space, mass, friction, elasticity)
         pg.sprite.Sprite.__init__(self)
         self.center = None
+        self.is_shot = False
 
     def draw_ball(self):
         self.center = pygame_util.to_pygame(self.ball.position, self.display)
