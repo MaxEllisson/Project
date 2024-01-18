@@ -142,5 +142,15 @@ class Ball(Weapons):
         self.ball.apply_impulse_at_local_point(shot_power * Vec2d(1, 0))
 
 
+class PowerIndicator(pg.sprite.Sprite):
+    def __init__(self, display, pos, size):
+        pg.sprite.Sprite.__init__(self)
+        self.display = display
+        self.x, self.y = pos
+        self.width, self.height = size
+        self.rect_in = pg.Rect(self.display, (self.x, self.y), (self.width, self.height))
+        self.rect_out = pg.Rect(self.display, (self.x, self.y), (self.width, self.height))
+
+
 class Enemy(pg.sprite.Sprite):
     pass
