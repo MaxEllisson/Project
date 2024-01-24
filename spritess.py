@@ -54,12 +54,6 @@ class Label(MenuComponents):
             self.display.blit(self.text, self.pos)
 
 
-class Slider(MenuComponents):
-    def __init__(self, display, pos, size, text, scale):
-        super().__init__(display, pos, size, text)
-        self.range = scale
-
-
 class Floor(pg.sprite.Sprite):
     def __init__(self, display, start, end, space):
         pg.sprite.Sprite.__init__(self)
@@ -142,15 +136,27 @@ class Ball(Weapons):
         self.ball.apply_impulse_at_local_point(shot_power * Vec2d(1, 0))
 
 
-class PowerIndicator(pg.sprite.Sprite):
+class PowerSlider(pg.sprite.Sprite):
     def __init__(self, display, pos, size):
         pg.sprite.Sprite.__init__(self)
         self.display = display
         self.x, self.y = pos
         self.width, self.height = size
-        self.rect_in = pg.Rect(self.display, (self.x, self.y), (self.width, self.height))
-        self.rect_out = pg.Rect(self.display, (self.x, self.y), (self.width, self.height))
+        self.rect_in = pg.Rect((self.x, self.y), (self.width, self.height))
+        self.rect_out = pg.Rect((self.x, self.y), (self.width, self.height))
+
+    def draw_power(self, power):
+        percentage = (power / 1000)
+        self.rect_in.width = self.width * percentage
+        pg.draw.rect(self.display, 'blue', self.rect_out, 5)
+        pg.draw.rect(self.display, 'black', self.rect_in, 5)
 
 
 class Enemy(pg.sprite.Sprite):
-    pass
+    def __init__(self, display, pos, size):
+        pg.sprite.Sprite.__init__(self)
+        self.display = display
+        self.x, self.y = pos
+        self.width, self.height = size
+
+    def draw
