@@ -1,6 +1,5 @@
 import pygame as pg
 from spritess import Button, Label
-import PySimpleGUI as sg
 
 
 class Menu:
@@ -50,18 +49,6 @@ class Menu:
                                     self.game.class_choice = 2
 
                         self.game.in_menu = False
-
-
-'''
-            for element in self.elements:
-                if isinstance(element, Button):
-                    if event.type == pg.MOUSEBUTTONDOWN and element.is_hovered():
-                        match element.text:
-                            case 'quit':
-                                self.game.running = False
-                            case 'play':
-                                self.game.state = 2
-'''
 
 
 class StartMenu(Menu):

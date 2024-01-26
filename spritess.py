@@ -1,3 +1,5 @@
+import math
+
 import pygame as pg
 import pymunk as pm
 from pymunk import pygame_util
@@ -113,12 +115,14 @@ class Weapons(pg.sprite.Sprite):
         self.radius = radius
         self.space = space
         self.ball = pm.Body(body_type=pm.Body.DYNAMIC)
+        self.ball.angle = 0
         self.ball.position = pos
         self.ball_shape = pm.Circle(self.ball, self.radius)
         self.ball_shape.mass = mass
         self.ball_shape.friction = friction
         self.ball_shape.elasticity = elasticity
         self.space.add(self.ball, self.ball_shape)
+        self.is_shot = False
 
 
 class Ball(Weapons):
@@ -126,14 +130,15 @@ class Ball(Weapons):
         super().__init__(display, pos, radius, space, mass, friction, elasticity)
         pg.sprite.Sprite.__init__(self)
         self.center = None
-        self.is_shot = False
 
     def draw_ball(self):
         self.center = pygame_util.to_pygame(self.ball.position, self.display)
         pg.draw.circle(self.display, 'blue', self.center, self.radius + 1)
 
-    def launch(self, shot_power):
-        self.ball.apply_impulse_at_local_point(shot_power * Vec2d(1, 0))
+    def launch(self, shot_power, shot_angle):
+        self.ball.angle = math.radians(shot_angle)
+        self.ball.apply_impulse_at_local_point(12 * shot_power * Vec2d(1, 0))
+        self.is_shot = True
 
 
 class PowerSlider(pg.sprite.Sprite):
@@ -152,6 +157,22 @@ class PowerSlider(pg.sprite.Sprite):
         pg.draw.rect(self.display, 'black', self.rect_in, 5)
 
 
+class AngleGraphic(pg.sprite.Sprite):
+    def __init__(self, display, pos, size):
+        pg.sprite.Sprite.__init__(self)
+        self.display = display
+        self.x, self.y = pos
+        self.width, self.height = size
+        self.rect_in = pg.Rect((self.x, self.y), (self.width, self.height))
+        self.rect_out = pg.Rect((self.x, self.y), (self.width, self.height))
+
+    def draw_angle(self, angle):
+        percentage = (angle / 90)
+        self.rect_in.width = self.width * percentage
+        pg.draw.rect(self.display, 'blue', self.rect_out, 5)
+        pg.draw.rect(self.display, 'black', self.rect_in, 5)
+
+
 class Enemy(pg.sprite.Sprite):
     def __init__(self, display, pos, size):
         pg.sprite.Sprite.__init__(self)
@@ -159,4 +180,12 @@ class Enemy(pg.sprite.Sprite):
         self.x, self.y = pos
         self.width, self.height = size
 
-    def draw
+    def draw(self):
+        pass
+
+
+class Image:
+    def __init__(self, display):
+        self.display = display
+        self.image = pg.image.load(os.path.join('41524.JPG'))
+        self.display.blit(self.image)

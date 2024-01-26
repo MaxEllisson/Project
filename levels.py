@@ -1,12 +1,14 @@
+import math
 import pymunk as pm
 import pygame as pg
-from spritess import Floor, Block, Ball, Button, PowerSlider
+from spritess import Floor, Block, Ball, Button, PowerSlider, AngleGraphic, Image
 from pymunk import Vec2d
 
 
 class Level:
     def __init__(self, game):
         self.shot_power = None
+        self.shot_angle = None
         self.game = game
         self.space = pm.Space()
         self.space.gravity = (0, 981)
@@ -16,13 +18,12 @@ class Level:
         self.elements = pg.sprite.Group()
         self.sliders = pg.sprite.Group()
         slider_1 = PowerSlider(self.game.display, (100, 100), (200, 100))
-        self.sliders.add(slider_1)
+        slider_2 = AngleGraphic(self.game.display, (100, 200), (200, 100))
+        self.sliders.add(slider_1, slider_2)
 
     def create_class(self):
         if self.game.class_choice == 1:
             self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 50, self.space, 2, 0.5, 0.5))
-            self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 20, self.space, 2, 0.5, 0.5))
-            self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 10, self.space, 2, 0.5, 0.5))
         else:
             self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 50, self.space, 2, 0.5, 0.5))
 
@@ -33,18 +34,24 @@ class Level:
                 self.game.running = False
                 self.game.in_game = False
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    current_weapon.launch(self.shot_power)
+                if event.key == pg.K_SPACE and not current_weapon.is_shot:
+                    current_weapon.launch(self.shot_power, self.shot_angle)
                 match event.key:
                     case pg.K_d if self.shot_power < 1000:
                         self.shot_power += 100
                     case pg.K_a if self.shot_power > 0:
                         self.shot_power -= 100
+                    case pg.K_w if self.shot_angle < 90:
+                        self.shot_angle += 1
+                    case pg.K_s if self.shot_angle > 0:
+                        self.shot_angle -= 1
 
     def run(self):
         self.game.in_game = True
         self.create_class()
         self.shot_power = 100
+        self.shot_angle = 0
+        self.background = Image(self.game.display)
         while self.game.in_game:
             self.check_events()
             self.game.display.fill('red')
@@ -62,6 +69,8 @@ class Level:
             for sliders in self.sliders:
                 if isinstance(sliders, PowerSlider):
                     sliders.draw_power(self.shot_power)
+                if isinstance(sliders, AngleGraphic):
+                    sliders.draw_angle(self.shot_angle)
             pg.display.update()
             self.game.clock.tick(165)
             self.space.step(1 / 165)
