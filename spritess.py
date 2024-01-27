@@ -174,18 +174,58 @@ class AngleGraphic(pg.sprite.Sprite):
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, display, pos, size):
+    def __init__(self, display, pos, size, space):
         pg.sprite.Sprite.__init__(self)
         self.display = display
         self.x, self.y = pos
         self.width, self.height = size
+        self.enemy = pm.Body(body_type=pm.Body.DYNAMIC)
+        self.enemy.position = pos
+        self.enemy_shape = pm.Poly.create_box(self.enemy, (self.width, self.height))
+        self.corners = self.enemy_shape.get_vertices()
+        space.add(self.enemy, self.enemy_shape)
+
+    def draw_enemy(self):
+        vertex = []
+        for point in self.corners:
+            updated_point = (point.rotated(self.enemy_shape.body.angle) + self.enemy.position)
+            vertex.append(pygame_util.to_pygame(updated_point, self.display))
+
+        pg.draw.polygon(self.display, 'yellow', vertex)
+
+
+class Image:
+    def __init__(self, display, image):
+        self.display = display
+        self.image = image
+        # self.image = pg.image.load(
+        #    {"gamebackground": os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "images",
+        #                                    "gamebackground.jpg")}["gamebackground"])
 
     def draw(self):
         pass
 
 
-class Image:
-    def __init__(self, display):
+class Music:
+    def __init__(self, display, file):
         self.display = display
-        self.image = pg.image.load(os.path.join('41524.JPG'))
-        self.display.blit(self.image)
+        self.file = file
+
+    def play_music(self):
+        pg.mixer.music.load(self.file)
+
+
+class MusicSlider(Music):
+    def __init__(self, display, file, pos, size):
+        super().__init__(display, file)
+        self.display = display
+        self.x, self.y = pos
+        self.width, self.height = size
+        self.rect_in = pg.Rect((self.x, self.y), (self.width, self.height))
+        self.rect_out = pg.Rect((self.x, self.y), (self.width, self.height))
+
+    def draw_volume(self, volume):
+        percentage = (volume / 100)
+        self.rect_in.width = self.width * percentage
+        pg.draw.rect(self.display, 'blue', self.rect_out, 5)
+        pg.draw.rect(self.display, 'black', self.rect_in, 5)

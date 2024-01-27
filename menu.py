@@ -86,3 +86,9 @@ class ClassMenu(Menu):
         class1 = Button(self.game.display, (540, 410), (200, 100), 'class 1')
         class2 = Button(self.game.display, (540, 510), (200, 100), 'class 2')
         self.elements.add(title, class1, class2)
+
+
+class GameMenu(Menu):
+    def __init__(self, game):
+        super().__init(game)
+        title = Label(self.game.display, (540, 100), (200, 100), 'Options')

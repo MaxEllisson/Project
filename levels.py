@@ -7,6 +7,7 @@ from pymunk import Vec2d
 
 class Level:
     def __init__(self, game):
+        self.background = None
         self.shot_power = None
         self.shot_angle = None
         self.game = game
@@ -29,6 +30,7 @@ class Level:
 
     def check_events(self):
         current_weapon = self.weapons.sprites()[0]
+        pg.key.set_repeat(250, 80)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.game.running = False
@@ -51,7 +53,7 @@ class Level:
         self.create_class()
         self.shot_power = 100
         self.shot_angle = 0
-        self.background = Image(self.game.display)
+        # self.background = Image(self.game.display)
         while self.game.in_game:
             self.check_events()
             self.game.display.fill('red')
