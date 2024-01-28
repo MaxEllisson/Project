@@ -76,12 +76,16 @@ class Floor(pg.sprite.Sprite):
 
 
 class Block(pg.sprite.Sprite):
-    def __init__(self, display, pos: Vec2d, size, space):
+    def __init__(self, display, pos: Vec2d, size, space, body, angle):
         pg.sprite.Sprite.__init__(self)
         self.width, self.height = size
         self.display = display
-        self.block = pm.Body(body_type=pm.Body.DYNAMIC)
+        if body == 'dynamic':
+            self.block = pm.Body(body_type=pm.Body.DYNAMIC)
+        elif body == 'static':
+            self.block = pm.Body(body_type=pm.Body.STATIC)
         self.block.position = pos
+        self.block.angle = angle
         self.block_shape = pm.Poly.create_box(self.block, (self.width, self.height))
         self.corners = self.block_shape.get_vertices()
         self.block_shape.mass = 2
@@ -97,16 +101,29 @@ class Block(pg.sprite.Sprite):
 
         pg.draw.polygon(self.display, 'blue', vertex)
 
-
-class Sliders(pg.sprite.Sprite):
-    def __init__(self, display, pos, size, maximum, minimum):
+'''
+class Triangle(pg.sprite.Sprite):
+    def __init__(self, display, pos, space, mass, coords):
         pg.sprite.Sprite.__init__(self)
         self.display = display
-        self.pos = pos
-        self.size = size
-        self.maximum = maximum
-        self.minimum = minimum
+        ((self.x, self.y), (self.x_2, self.y_2), (self.x_3, self.y_3)) = coords
+        self.triangle_shape = pm.Poly(None, ((self.x, self.y), (self.x_2, self.y_2), (self.x_3, self.y_3)))
+        self.triangle_mass = mass
+        self.triangle_moment = pm.moment_for_poly(self.triangle_mass, self.triangle_shape.get_vertices())
+        self.triangle_body = pm.Body(self.triangle_mass, self.triangle_moment)
+        self.triangle_body.position = pos
+        self.triangle_shape = self.triangle_body
+        space.add(self.triangle_body, self.triangle_shape)
 
+    def draw_triangle(self):
+        vertex = []
+        for point in self.corners:
+            updated_point = (point.rotated(self.triangle_shape.body.angle) + self.triangle.position)
+            vertex.append(pygame_util.to_pygame(updated_point, self.display))
+
+        pg.draw.polygon(self.display, 'blue', vertex)
+
+'''
 
 class Weapons(pg.sprite.Sprite):
     def __init__(self, display, pos: Vec2d, radius, space, mass, friction, elasticity):
@@ -137,7 +154,7 @@ class Ball(Weapons):
 
     def launch(self, shot_power, shot_angle):
         self.ball.angle = math.radians(shot_angle)
-        self.ball.apply_impulse_at_local_point(12 * shot_power * Vec2d(1, 0))
+        self.ball.apply_impulse_at_local_point(10 * shot_power * Vec2d(1, 0))
         self.is_shot = True
 
 
@@ -194,30 +211,9 @@ class Enemy(pg.sprite.Sprite):
         pg.draw.polygon(self.display, 'yellow', vertex)
 
 
-class Image:
-    def __init__(self, display, image):
-        self.display = display
-        self.image = image
-        # self.image = pg.image.load(
-        #    {"gamebackground": os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "images",
-        #                                    "gamebackground.jpg")}["gamebackground"])
-
-    def draw(self):
-        pass
-
-
-class Music:
-    def __init__(self, display, file):
-        self.display = display
-        self.file = file
-
-    def play_music(self):
-        pg.mixer.music.load(self.file)
-
-
-class MusicSlider(Music):
+class MusicSlider(pg.sprite.Sprite):
     def __init__(self, display, file, pos, size):
-        super().__init__(display, file)
+        pg.sprite.Sprite.__init__(self)
         self.display = display
         self.x, self.y = pos
         self.width, self.height = size

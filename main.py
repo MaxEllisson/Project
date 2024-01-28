@@ -19,6 +19,7 @@ class Game:
             4: ClassMenu(self),
             5: Level1(self)
         }
+
         self.state = 1
 
     def run(self):
