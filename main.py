@@ -2,6 +2,7 @@ import pygame as pg
 import pymunk as pm
 from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameMenu
 from levels import Level1
+import os
 
 
 class Game:
@@ -12,6 +13,20 @@ class Game:
         self.display = pg.display.set_mode((1280, 720))
         self.clock = pg.time.Clock()
         self.class_choice = None
+        self.images = {
+            'game_background': pg.image.load(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "Images",
+                             "gamebackground.jpg")),
+            'block_static_image': pg.image.load(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), 'assets', 'Images',
+                             'blockstaticimage.jpg')),
+            'block_dynamic_image': pg.image.load(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), 'assets', 'Images',
+                             'blockimage.jpg'))
+
+        }
+
+        self.state = 1
         self.states = {
             1: StartMenu(self),
             2: LevelMenu(self),
@@ -20,8 +35,6 @@ class Game:
             5: Level1(self),
             6: GameMenu(self)
         }
-
-        self.state = 1
 
     def run(self):
         while self.running:

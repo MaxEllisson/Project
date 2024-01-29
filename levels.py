@@ -52,11 +52,11 @@ class Level:
                         self.shot_angle -= 1
             for element in self.elements:
                 if isinstance(element, Button):
-                    if element.is_hovered():
+                    if element.is_hovered() and event.type == pg.MOUSEBUTTONDOWN:
                         # match-case block for button function
                         match element.low:
                             case 'settings':
-                                self.game.state = 6
+                                self.game.states[6].run()
 
     def run(self):
         self.game.in_game = True
@@ -94,27 +94,28 @@ class Level:
 class Level1(Level):
     def __init__(self, game):
         super().__init__(game)
-        self.image = pg.image.load(
-            os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "Images",
-                         "gamebackground.jpg"))
+       # self.image = pg.image.load(
+        #    os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "Images",
+         #                "gamebackground.jpg"))
+        self.image = self.game.images['game_background']
         self.image = pg.transform.scale(self.image, (1280, 720))
         floor = Floor(self.game.display, (0, 720), (1280, 720), self.space)
-        block_1 = Block(self.game.display, Vec2d(75, 620), (150, 200), self.space, 'static', 0)
-        block_2 = Block(self.game.display, Vec2d(200, 532), (120, 25), self.space, 'static', 0)
-        block_3 = Block(self.game.display, Vec2d(370, 690), (256, 50), self.space, 'static', 0)
-        block_4 = Block(self.game.display, Vec2d(600, 610), (225, 71), self.space, 'static', -0.8)
-        block_5 = Block(self.game.display, Vec2d(853, 586), (85, 250), self.space, 'static', 0)
-        block_6 = Block(self.game.display, Vec2d(1024, 586), (85, 250), self.space, 'static', 0)
-        block_7 = Block(self.game.display, Vec2d(1195, 586), (85, 250), self.space, 'static', 0)
-        block_8 = Block(self.game.display, Vec2d(1024, 411), (427, 100), self.space, 'static', 0)
-        block_9 = Block(self.game.display, Vec2d(1024, 311), (50, 200), self.space, 'dynamic', 0)
-        block_10 = Block(self.game.display, Vec2d(896, 111), (13, 100), self.space, 'static', 0)
-        block_11 = Block(self.game.display, Vec2d(1024, 151), (171, 50), self.space, 'dynamic', 0)
-        block_12 = Block(self.game.display, Vec2d(1152, 111), (13, 100), self.space, 'static', 0)
-        block_13 = Block(self.game.display, Vec2d(1024, 47), (280, 25), self.space, 'static', 0)
+        block_1 = Block(self.game, Vec2d(75, 620), (150, 200), self.space, 'static', 0)
+        block_2 = Block(self.game, Vec2d(200, 532), (120, 25), self.space, 'static', 0)
+        block_3 = Block(self.game, Vec2d(370, 690), (256, 50), self.space, 'static', 0)
+        block_4 = Block(self.game, Vec2d(600, 610), (225, 71), self.space, 'static', -0.8)
+        block_5 = Block(self.game, Vec2d(853, 586), (85, 250), self.space, 'static', 0)
+        block_6 = Block(self.game, Vec2d(1024, 586), (85, 250), self.space, 'static', 0)
+        block_7 = Block(self.game, Vec2d(1195, 586), (85, 250), self.space, 'static', 0)
+        block_8 = Block(self.game, Vec2d(1024, 411), (427, 100), self.space, 'static', 0)
+        block_9 = Block(self.game, Vec2d(1024, 311), (50, 200), self.space, 'dynamic', 0)
+        block_10 = Block(self.game, Vec2d(896, 111), (13, 100), self.space, 'static', 0)
+        block_11 = Block(self.game, Vec2d(1024, 151), (171, 50), self.space, 'dynamic', 0)
+        block_12 = Block(self.game, Vec2d(1152, 111), (13, 100), self.space, 'static', 0)
+        block_13 = Block(self.game, Vec2d(1024, 47), (280, 25), self.space, 'static', 0)
         enemy_1 = Enemy(self.game.display, Vec2d(200, 696), (25, 25), self.space)
         enemy_2 = Enemy(self.game.display, Vec2d(1024, 86), (25, 25), self.space)
-        settings = Button(self.game.display, Vec2d(50, 25), (100, 50), 'settings')
+        settings = Button(self.game.display, Vec2d(50, 25), (100, 50), 'settings', 18)
         self.shapes.add(floor, block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8, block_9, block_10,
                         block_11, block_12, block_13)
         self.enemies.add(enemy_1, enemy_2)

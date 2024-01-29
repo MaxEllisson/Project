@@ -8,15 +8,16 @@ from pymunk import Vec2d
 
 
 class MenuComponents(pg.sprite.Sprite):
-    def __init__(self, display, pos, size, text):
+    def __init__(self, display, pos, size, text, font_size):
         pg.sprite.Sprite.__init__(self)
         self.pos = None
         self.display = display
         self.colour = (255, 255, 255)
         self.x, self.y = pos
         self.width, self.height = size
+        self.font_size = font_size
         self.font = pg.font.Font({"Bungee": os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "fonts",
-                                                         "BungeeSpice-Regular.ttf")}["Bungee"], 50)
+                                                         "BungeeSpice-Regular.ttf")}["Bungee"], self.font_size)
         self.text = self.font.render(text, False, self.colour)
 
     def pos_text(self):
@@ -25,8 +26,8 @@ class MenuComponents(pg.sprite.Sprite):
 
 
 class Button(MenuComponents):
-    def __init__(self, display, pos, size, text):
-        super().__init__(display, pos, size, text)
+    def __init__(self, display, pos, size, text, font_size):
+        super().__init__(display, pos, size, text, font_size)
         self.rect = pg.Rect((self.x, self.y), (self.width, self.height))
         self.colour = 'green'
         self.low = text.lower()
@@ -47,8 +48,8 @@ class Button(MenuComponents):
 
 
 class Label(MenuComponents):
-    def __init__(self, display, pos, size, text):
-        super().__init__(display, pos, size, text)
+    def __init__(self, display, pos, size, text, font_size):
+        super().__init__(display, pos, size, text, font_size)
 
     def draw(self):
         if hasattr(self, "text"):
@@ -76,12 +77,15 @@ class Floor(pg.sprite.Sprite):
 
 
 class Block(pg.sprite.Sprite):
-    def __init__(self, display, pos: Vec2d, size, space, body, angle):
+    def __init__(self, game, pos: Vec2d, size, space, body, angle):
         pg.sprite.Sprite.__init__(self)
+        self.game = game
         self.width, self.height = size
-        self.display = display
+        self.display = game.display
         if body == 'dynamic':
             self.block = pm.Body(body_type=pm.Body.DYNAMIC)
+            self.image = game.images['block_dynamic_image']
+            self.image = pg.transform.scale(self.image, (self.width, self.height))
         elif body == 'static':
             self.block = pm.Body(body_type=pm.Body.STATIC)
         self.block.position = pos
@@ -97,9 +101,13 @@ class Block(pg.sprite.Sprite):
         vertex = []
         for point in self.corners:
             updated_point = (point.rotated(self.block_shape.body.angle) + self.block.position)
-            vertex.append(pygame_util.to_pygame(updated_point, self.display))
+            vertex.append(pygame_util.to_pygame(updated_point, self.game.display))
 
-        pg.draw.polygon(self.display, 'blue', vertex)
+        pg.draw.polygon(self.game.display, 'blue', vertex)
+        if hasattr(self, 'image'):
+            self.image = pg.transform.rotate(self.image, math.degrees(self.block.angle))
+            self.game.display.blit(self.image, self.block.position - (self.width // 2, self.height // 2))
+
 
 '''
 class Triangle(pg.sprite.Sprite):
@@ -124,6 +132,7 @@ class Triangle(pg.sprite.Sprite):
         pg.draw.polygon(self.display, 'blue', vertex)
 
 '''
+
 
 class Weapons(pg.sprite.Sprite):
     def __init__(self, display, pos: Vec2d, radius, space, mass, friction, elasticity):
