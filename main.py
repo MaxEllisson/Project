@@ -1,6 +1,6 @@
 import pygame as pg
 import pymunk as pm
-from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu
+from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameMenu
 from levels import Level1
 
 
@@ -17,7 +17,8 @@ class Game:
             2: LevelMenu(self),
             3: OptionsMenu(self),
             4: ClassMenu(self),
-            5: Level1(self)
+            5: Level1(self),
+            6: GameMenu(self)
         }
 
         self.state = 1

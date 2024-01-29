@@ -2,7 +2,7 @@ import math
 import os
 import pymunk as pm
 import pygame as pg
-from spritess import Floor, Block, Ball, Button, PowerSlider, AngleGraphic, MusicSlider
+from spritess import Floor, Block, Ball, Button, PowerSlider, AngleGraphic, MusicSlider, Enemy
 from pymunk import Vec2d
 
 
@@ -17,11 +17,12 @@ class Level:
         self.space.gravity = (0, 981)
         self.shapes = pg.sprite.Group()
         self.weapons = pg.sprite.Group()
-        self.current_weapon = []
         self.elements = pg.sprite.Group()
         self.sliders = pg.sprite.Group()
-        slider_1 = PowerSlider(self.game.display, (100, 100), (200, 100))
-        slider_2 = AngleGraphic(self.game.display, (100, 200), (200, 100))
+        self.enemies = pg.sprite.Group()
+        self.current_weapon = []
+        slider_1 = PowerSlider(self.game.display, (50, 100), (200, 50))
+        slider_2 = AngleGraphic(self.game.display, (50, 175), (200, 50))
         self.sliders.add(slider_1, slider_2)
 
     def create_class(self):
@@ -49,6 +50,13 @@ class Level:
                         self.shot_angle += 1
                     case pg.K_s if self.shot_angle > 0:
                         self.shot_angle -= 1
+            for element in self.elements:
+                if isinstance(element, Button):
+                    if element.is_hovered():
+                        # match-case block for button function
+                        match element.low:
+                            case 'settings':
+                                self.game.state = 6
 
     def run(self):
         self.game.in_game = True
@@ -65,8 +73,6 @@ class Level:
                     shapes.draw_block()
                 elif isinstance(shapes, Floor):
                     shapes.draw_floor()
-                elif isinstance(shapes, Triangle):
-                    shapes.draw_triangle()
             for elements in self.elements:
                 if isinstance(elements, Button):
                     elements.draw()
@@ -78,6 +84,8 @@ class Level:
                     sliders.draw_power(self.shot_power)
                 if isinstance(sliders, AngleGraphic):
                     sliders.draw_angle(self.shot_angle)
+            for enemy in self.enemies:
+                enemy.draw_enemy()
             pg.display.update()
             self.game.clock.tick(165)
             self.space.step(1 / 165)
@@ -91,8 +99,23 @@ class Level1(Level):
                          "gamebackground.jpg"))
         self.image = pg.transform.scale(self.image, (1280, 720))
         floor = Floor(self.game.display, (0, 720), (1280, 720), self.space)
-        block = Block(self.game.display, Vec2d(0, 620), (300, 200), self.space, 'static', 0)
+        block_1 = Block(self.game.display, Vec2d(75, 620), (150, 200), self.space, 'static', 0)
         block_2 = Block(self.game.display, Vec2d(200, 532), (120, 25), self.space, 'static', 0)
         block_3 = Block(self.game.display, Vec2d(370, 690), (256, 50), self.space, 'static', 0)
-        # triangle = Triangle(self.game.display, (725, 720), self.space, 3, ((0, 0), (170, 0), (170, 100)))
-        self.shapes.add(floor, block, block_2, block_3)
+        block_4 = Block(self.game.display, Vec2d(600, 610), (225, 71), self.space, 'static', -0.8)
+        block_5 = Block(self.game.display, Vec2d(853, 586), (85, 250), self.space, 'static', 0)
+        block_6 = Block(self.game.display, Vec2d(1024, 586), (85, 250), self.space, 'static', 0)
+        block_7 = Block(self.game.display, Vec2d(1195, 586), (85, 250), self.space, 'static', 0)
+        block_8 = Block(self.game.display, Vec2d(1024, 411), (427, 100), self.space, 'static', 0)
+        block_9 = Block(self.game.display, Vec2d(1024, 311), (50, 200), self.space, 'dynamic', 0)
+        block_10 = Block(self.game.display, Vec2d(896, 111), (13, 100), self.space, 'static', 0)
+        block_11 = Block(self.game.display, Vec2d(1024, 151), (171, 50), self.space, 'dynamic', 0)
+        block_12 = Block(self.game.display, Vec2d(1152, 111), (13, 100), self.space, 'static', 0)
+        block_13 = Block(self.game.display, Vec2d(1024, 47), (280, 25), self.space, 'static', 0)
+        enemy_1 = Enemy(self.game.display, Vec2d(200, 696), (25, 25), self.space)
+        enemy_2 = Enemy(self.game.display, Vec2d(1024, 86), (25, 25), self.space)
+        settings = Button(self.game.display, Vec2d(50, 25), (100, 50), 'settings')
+        self.shapes.add(floor, block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8, block_9, block_10,
+                        block_11, block_12, block_13)
+        self.enemies.add(enemy_1, enemy_2)
+        self.elements.add(settings)

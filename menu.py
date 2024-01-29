@@ -90,5 +90,10 @@ class ClassMenu(Menu):
 
 class GameMenu(Menu):
     def __init__(self, game):
-        super().__init(game)
-        title = Label(self.game.display, (540, 100), (200, 100), 'Options')
+        super().__init__(game)
+        title = Label(self.game.display, (540, 100), (200, 100), 'Settings')
+        resume = Button(self.game.display, (500, 300), (280, 100), 'Resume')
+        restart = Button(self.game.display, (500, 450), (280, 100), 'Restart')
+        main_menu = Button(self.game.display, (500, 600), (280, 100), 'Main Menu')
+        quit_game = Button(self.game.display, (800, 600), (120, 120), 'Quit Game')
+        self.elements.add(title, resume, restart, main_menu, quit_game)

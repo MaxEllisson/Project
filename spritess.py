@@ -191,14 +191,16 @@ class AngleGraphic(pg.sprite.Sprite):
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, display, pos, size, space):
+    def __init__(self, display, pos: Vec2d, size, space):
         pg.sprite.Sprite.__init__(self)
         self.display = display
-        self.x, self.y = pos
         self.width, self.height = size
         self.enemy = pm.Body(body_type=pm.Body.DYNAMIC)
         self.enemy.position = pos
         self.enemy_shape = pm.Poly.create_box(self.enemy, (self.width, self.height))
+        self.enemy_shape.mass = 2
+        self.enemy_shape.friction = 0.5
+        self.enemy_shape.elasticity = 0.5
         self.corners = self.enemy_shape.get_vertices()
         space.add(self.enemy, self.enemy_shape)
 
