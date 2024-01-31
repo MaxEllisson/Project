@@ -115,7 +115,7 @@ class Level1(Level):
         block_13 = Block(self.game, Vec2d(1024, 47), (280, 25), self.space, 'static', 0)
         enemy_1 = Enemy(self.game.display, Vec2d(200, 696), (25, 25), self.space)
         enemy_2 = Enemy(self.game.display, Vec2d(1024, 86), (25, 25), self.space)
-        settings = Button(self.game.display, Vec2d(50, 25), (100, 50), 'settings', 18)
+        settings = Button(self.game, Vec2d(50, 25), (100, 50), 'settings', 18)
         self.shapes.add(floor, block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8, block_9, block_10,
                         block_11, block_12, block_13)
         self.enemies.add(enemy_1, enemy_2)

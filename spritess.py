@@ -8,10 +8,10 @@ from pymunk import Vec2d
 
 
 class MenuComponents(pg.sprite.Sprite):
-    def __init__(self, display, pos, size, text, font_size):
+    def __init__(self, game, pos, size, text, font_size):
         pg.sprite.Sprite.__init__(self)
         self.pos = None
-        self.display = display
+        self.display = game.display
         self.colour = (255, 255, 255)
         self.x, self.y = pos
         self.width, self.height = size
@@ -19,6 +19,8 @@ class MenuComponents(pg.sprite.Sprite):
         self.font = pg.font.Font({"Bungee": os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "fonts",
                                                          "BungeeSpice-Regular.ttf")}["Bungee"], self.font_size)
         self.text = self.font.render(text, False, self.colour)
+        self.image = game.images['button_image']
+        self.image = pg.transform.scale(self.image, (self.width, self.height))
 
     def pos_text(self):
         self.pos = self.text.get_rect()
@@ -26,8 +28,8 @@ class MenuComponents(pg.sprite.Sprite):
 
 
 class Button(MenuComponents):
-    def __init__(self, display, pos, size, text, font_size):
-        super().__init__(display, pos, size, text, font_size)
+    def __init__(self, game, pos, size, text, font_size):
+        super().__init__(game, pos, size, text, font_size)
         self.rect = pg.Rect((self.x, self.y), (self.width, self.height))
         self.colour = 'green'
         self.low = text.lower()
@@ -39,17 +41,19 @@ class Button(MenuComponents):
 
     def draw(self):
         if self.is_hovered():
-            pg.draw.rect(self.display, 'blue', self.rect)
+            self.image = pg.transform.scale(self.image, (self.width+10, self.height+10))
+            self.display.blit(self.image, (self.x, self.y))
         else:
-            pg.draw.rect(self.display, self.colour, self.rect)
+            self.image = pg.transform.scale(self.image, (self.width, self.height))
+            self.display.blit(self.image, (self.x, self.y))
         if hasattr(self, "text"):
             self.pos_text()
             self.display.blit(self.text, self.pos)
 
 
 class Label(MenuComponents):
-    def __init__(self, display, pos, size, text, font_size):
-        super().__init__(display, pos, size, text, font_size)
+    def __init__(self, game, pos, size, text, font_size):
+        super().__init__(game, pos, size, text, font_size)
 
     def draw(self):
         if hasattr(self, "text"):
@@ -84,10 +88,12 @@ class Block(pg.sprite.Sprite):
         self.display = game.display
         if body == 'dynamic':
             self.block = pm.Body(body_type=pm.Body.DYNAMIC)
-            self.image = game.images['block_dynamic_image']
-            self.image = pg.transform.scale(self.image, (self.width, self.height))
+            #self.image = game.images['block_dynamic_image']
+            #self.image = pg.transform.scale(self.image, (self.width, self.height))
         elif body == 'static':
             self.block = pm.Body(body_type=pm.Body.STATIC)
+            #self.image = game.images['block_static_image']
+            #self.image = pg.transform.scale(self.image, (self.width, self.height))
         self.block.position = pos
         self.block.angle = angle
         self.block_shape = pm.Poly.create_box(self.block, (self.width, self.height))

@@ -22,7 +22,13 @@ class Game:
                              'blockstaticimage.jpg')),
             'block_dynamic_image': pg.image.load(
                 os.path.join(os.path.dirname(os.path.realpath(__file__)), 'assets', 'Images',
-                             'blockimage.jpg'))
+                             'blockimage.jpg')),
+            'menu_background': pg.image.load(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), 'assets', 'Images',
+                             'menubackground.jpg')),
+            'button_image': pg.image.load(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), 'assets', 'Images',
+                             'buttonimage.jpg'))
 
         }
 
@@ -44,7 +50,7 @@ class Game:
             self.display.fill((0, 0, 0))
             self.states[self.state].run()
             pg.display.update()
-            self.clock.tick(165)
+            self.clock.tick(60)
 
 
 if __name__ == "__main__":
