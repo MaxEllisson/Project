@@ -1,5 +1,6 @@
 import pygame as pg
 from spritess import Button, Label
+import os
 
 
 class Menu:
@@ -7,10 +8,16 @@ class Menu:
         self.game = game
         self.elements = pg.sprite.Group()
         self.image = None
+        self.music = None
 
     def run(self):
         self.game.in_menu = True
         while self.game.in_menu:
+            pg.mixer.init()
+            pg.mixer.music.load(os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
+                                             'menumusic.mp3'))
+            pg.mixer.music.set_volume(1000)
+            pg.mixer.music.play()
             self.check_events()
             self.game.display.fill("red")
             if self.image is not None:
