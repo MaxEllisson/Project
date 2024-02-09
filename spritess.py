@@ -169,7 +169,7 @@ class Ball(Weapons):
 
     def launch(self, shot_power, shot_angle):
         self.ball.angle = math.radians(shot_angle)
-        self.ball.apply_impulse_at_local_point(10 * shot_power * Vec2d(1, 0))
+        self.ball.apply_impulse_at_local_point(8 * shot_power * Vec2d(1, 0))
         self.is_shot = True
 
 

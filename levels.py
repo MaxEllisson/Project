@@ -8,6 +8,7 @@ from pymunk import Vec2d
 
 class Level:
     def __init__(self, game):
+        self.remove = None
         self.background = None
         self.shot_power = None
         self.shot_angle = None
@@ -25,22 +26,38 @@ class Level:
         slider_2 = AngleGraphic(self.game.display, (50, 175), (200, 50))
         self.sliders.add(slider_1, slider_2)
 
+    def removed(self):
+        if self.current_weapon[0].is_shot:
+            self.space.remove(self.current_weapon[0].ball, self.current_weapon[0].ball_shape)
+            self.current_weapon.pop()
+            self.weapons.sprites().pop(0)
+            self.current_weapon.append(self.weapons.sprites()[0])
+            self.remove = True
+
     def create_class(self):
         if self.game.class_choice == 1:
+            self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 10, self.space, 2, 0.5, 0.5))
             self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 10, self.space, 2, 0.5, 0.5))
         else:
             self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 10, self.space, 2, 0.5, 0.5))
 
     def check_events(self):
-        current_weapon = self.weapons.sprites()[0]
+        self.current_weapon.append(self.weapons.sprites()[0])
         pg.key.set_repeat(250, 20)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.game.running = False
                 self.game.in_game = False
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE and not current_weapon.is_shot:
-                    current_weapon.launch(self.shot_power, self.shot_angle)
+                if event.key == pg.K_SPACE and not self.current_weapon[0].is_shot:
+                    self.current_weapon[0].launch(self.shot_power, self.shot_angle)
+                    '''
+                    if math.sqrt((self.shot_power * math.cos(self.shot_angle)) ** 2
+                                 + (self.shot_power * math.sin(self.shot_angle)) ** 2):
+                        self.removed()
+                    '''
+                    print(math.sqrt((self.shot_power * math.cos(self.shot_angle)) ** 2
+                                    + (self.shot_power * math.sin(self.shot_angle)) ** 2))
                 match event.key:
                     case pg.K_d if self.shot_power < 1000:
                         self.shot_power += 100
@@ -65,6 +82,8 @@ class Level:
         self.shot_angle = 0
         while self.game.in_game:
             self.check_events()
+            print(math.sqrt((self.shot_power * math.cos(self.shot_angle)) ** 2
+                            + (self.shot_power * math.sin(self.shot_angle)) ** 2))
             self.game.display.fill('red')
             if self.image is not None:
                 self.game.display.blit(self.image, (0, 0))
@@ -76,9 +95,10 @@ class Level:
             for elements in self.elements:
                 if isinstance(elements, Button):
                     elements.draw()
-            for weapons in self.weapons:
+            for weapons in self.current_weapon:
                 if isinstance(weapons, Ball):
-                    weapons.draw_ball()
+                    if not self.remove:
+                        weapons.draw_ball()
             for sliders in self.sliders:
                 if isinstance(sliders, PowerSlider):
                     sliders.draw_power(self.shot_power)
@@ -94,9 +114,9 @@ class Level:
 class Level1(Level):
     def __init__(self, game):
         super().__init__(game)
-       # self.image = pg.image.load(
+        # self.image = pg.image.load(
         #    os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "Images",
-         #                "gamebackground.jpg"))
+        #                "gamebackground.jpg"))
         self.image = self.game.images['game_background']
         self.image = pg.transform.scale(self.image, (1280, 720))
         floor = Floor(self.game.display, (0, 720), (1280, 720), self.space)
@@ -116,7 +136,8 @@ class Level1(Level):
         enemy_1 = Enemy(self.game.display, Vec2d(200, 696), (25, 25), self.space)
         enemy_2 = Enemy(self.game.display, Vec2d(1024, 86), (25, 25), self.space)
         settings = Button(self.game, Vec2d(50, 25), (100, 50), 'settings', 18)
-        self.shapes.add(floor, block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8, block_9, block_10,
+        self.shapes.add(floor, block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8, block_9,
+                        block_10,
                         block_11, block_12, block_13)
         self.enemies.add(enemy_1, enemy_2)
         self.elements.add(settings)

@@ -1,3 +1,5 @@
+""" This is the main module, it contains classes to do ..."""
+
 import pygame as pg
 import pymunk as pm
 from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameMenu
@@ -6,6 +8,9 @@ import os
 
 
 class Game:
+    """
+    """
+
     def __init__(self):
         self.running = True
         self.in_menu = True
