@@ -1,5 +1,5 @@
 import pygame as pg
-from spritess import Button, Label
+from spritess import Button, Label, MusicSlider
 import os
 
 
@@ -9,28 +9,33 @@ class Menu:
         self.elements = pg.sprite.Group()
         self.image = None
         self.music = None
+        self.volume = self.game.volume
 
     def run(self):
         self.game.in_menu = True
         while self.game.in_menu:
-            pg.mixer.init()
-            pg.mixer.music.load(os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
-                                             'menumusic.mp3'))
-            pg.mixer.music.set_volume(1000)
-            pg.mixer.music.play()
             self.check_events()
             self.game.display.fill("red")
             if self.image is not None:
                 self.game.display.blit(self.image, (0, 0))
             for element in self.elements:
-                if isinstance(element, Button):
-                    element.draw()
+                if isinstance(element, MusicSlider):
+                    element.draw_volume(self.volume)
                 else:
                     element.draw()
+
             pg.display.update()
             self.game.clock.tick(165)
 
     def check_events(self):
+        if pg.mouse.get_pressed()[0] == 1:
+            for element in self.elements:
+                if isinstance(element, MusicSlider):
+                    if element.is_hovered():
+                        mouse_pos = pg.mouse.get_pos()
+                        percentage = ((mouse_pos[0] - element.x) // (element.width / 100)) / 100
+                        self.volume = 1 * percentage
+                        pg.mixer.music.set_volume(self.volume)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.game.running = False
@@ -44,19 +49,23 @@ class Menu:
                                 case "quit":
                                     self.game.running = False
                                 case "play":
-                                    self.game.state = 2
+                                    self.game.change_state(2)
                                 case "options":
-                                    self.game.state = 3
+                                    self.game.change_state(3)
                                 case "back":
-                                    self.game.state = 1
+                                    self.game.change_state(self.game.state_history[-1])
                                 case "level 1":
-                                    self.game.state = 4
+                                    self.game.change_state(4)
                                 case "class 1":
-                                    self.game.state = 5
+                                    self.game.change_state(5)
                                     self.game.class_choice = 1
                                 case "class 2":
-                                    self.game.state = 5
+                                    self.game.change_state(5)
                                     self.game.class_choice = 2
+                                case "restart":
+                                    if self.game.state_history[-1] == 5:
+                                        self.game.change_state(5)
+                                        self.game.states[5].restart()
 
                         self.game.in_menu = False
 
@@ -90,7 +99,8 @@ class OptionsMenu(Menu):
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Volume', 50)
         back = Button(self.game, (50, 600), (250, 100), 'back', 50)
-        self.elements.add(title, back)
+        volume_slider = MusicSlider(self.game.display, (390, 300), (500, 50))
+        self.elements.add(title, back, volume_slider)
 
 
 class ClassMenu(Menu):
@@ -99,7 +109,8 @@ class ClassMenu(Menu):
         title = Label(self.game, (540, 100), (200, 100), 'Pick Your Class', 50)
         class1 = Button(self.game, (540, 410), (200, 100), 'class 1', 50)
         class2 = Button(self.game, (540, 510), (200, 100), 'class 2', 50)
-        self.elements.add(title, class1, class2)
+        back = Button(self.game, (50, 600), (250, 100), 'back', 50)
+        self.elements.add(title, class1, class2, back)
 
 
 class GameMenu(Menu):
@@ -111,3 +122,4 @@ class GameMenu(Menu):
         main_menu = Button(self.game, (500, 600), (280, 100), 'Main Menu', 50)
         quit_game = Button(self.game, (800, 600), (120, 120), 'Quit Game', 50)
         self.elements.add(title, resume, restart, main_menu, quit_game)
+

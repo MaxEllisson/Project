@@ -18,6 +18,14 @@ class Game:
         self.display = pg.display.set_mode((1280, 720))
         self.clock = pg.time.Clock()
         self.class_choice = None
+        self.volume = 1
+        self.state_history = []
+        pg.mixer.music.set_volume(self.volume)
+        self.soundtracks = {
+            'menu_music': pg.mixer.music.load(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
+                             'menumusic.mp3'))
+        }
         self.images = {
             'game_background': pg.image.load(
                 os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "Images",
@@ -47,7 +55,14 @@ class Game:
             6: GameMenu(self)
         }
 
+    def change_state(self, state):
+        self.state_history.append(self.state)
+        self.state = state
+
     def run(self):
+        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
+                                         'menumusic.mp3'))
+        pg.mixer.music.play()
         while self.running:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -60,6 +75,7 @@ class Game:
 
 if __name__ == "__main__":
     pg.init()
+    pg.mixer.init()
     x = Game()
     x.run()
     pg.quit()
