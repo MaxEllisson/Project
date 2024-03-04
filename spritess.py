@@ -111,7 +111,7 @@ class Block(pg.sprite.Sprite):
 
         pg.draw.polygon(self.game.display, 'blue', vertex)
         if hasattr(self, 'image'):
-            self.image = pg.transform.rotate(self.image, math.degrees(self.block.angle))
+            #self.image = pg.transform.rotate(self.image, math.degrees(-self.block.angle))
             self.game.display.blit(self.image, self.block.position - (self.width // 2, self.height // 2))
 
 

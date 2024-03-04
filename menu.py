@@ -56,6 +56,8 @@ class Menu:
                                     self.game.change_state(self.game.state_history[-1])
                                 case "level 1":
                                     self.game.change_state(4)
+                                case "level 2":
+                                    self.game.change_state(7)
                                 case "class 1":
                                     self.game.change_state(5)
                                     self.game.class_choice = 1

@@ -159,7 +159,7 @@ class Level1(Level):
         block_12 = Block(self.game, Vec2d(1152, 111), (13, 100), self.space, 'static', 0)
         block_13 = Block(self.game, Vec2d(1024, 47), (280, 25), self.space, 'static', 0)
         '''
-        blocks_data = [
+        blocks = [
             (Vec2d(75, 620), (150, 200), 'static', 0),
             (Vec2d(200, 532), (120, 25), 'static', 0),
             (Vec2d(370, 690), (256, 50), 'static', 0),
@@ -177,14 +177,22 @@ class Level1(Level):
         enemy_1 = Enemy(self.game.display, Vec2d(200, 696), (25, 25), self.space)
         enemy_2 = Enemy(self.game.display, Vec2d(1024, 86), (25, 25), self.space)
         settings = Button(self.game, Vec2d(50, 25), (100, 50), 'settings', 18)
-        '''
-        self.shapes.add(floor, block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8, block_9,
-                        block_10,
-                        block_11, block_12, block_13)
-        '''
 
-        self.shapes.add(floor, (Block(self.game, *block_data, self.space) for block_data in blocks_data))
+        self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
         self.enemies.add(enemy_1, enemy_2)
         self.elements.add(settings)
 
 
+class Level2(Level):
+    def __init__(self, game):
+        super().__init__(game)
+        self.image = self.game.images['game_background']
+        self.image = pg.transform.scale(self.image, (1280, 720))
+        floor = Floor(self.game.display, (0, 720), (1280, 720), self.space)
+        blocks = [
+            (Vec2d(80, 620), (160, 200), 'static', 0),
+            (Vec2d(660, 520), (40, 400), 'dynamic', 0),
+            (Vec2d(700, 695), (40, 50), 'dynamic', 0),
+            (Vec2d(860, ))
+        ]
+        self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
