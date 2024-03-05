@@ -59,6 +59,7 @@ class Level:
         else:
             self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 10, self.space, 2, 0.5, 0.5))
             self.weapons.add(Ball(self.game.display, Vec2d(80, 100), 10, self.space, 2, 0.5, 0.5))
+            self.weapons.add(Ball(self.game.display, Vec2d(80, 100), 10, self.space, 2, 0.5, 0.5))
 
     def check_events(self):
         current_weapon = self.weapons.sprites()[0]
@@ -177,8 +178,15 @@ class Level2(Level):
         blocks = [
             (Vec2d(80, 620), (160, 200), 'static', 0),
             (Vec2d(660, 520), (40, 400), 'dynamic', 0),
-            (Vec2d(700, 695), (40, 50), 'dynamic', 0),
-            (Vec2d(860, 645), (260, 50), 'static', 0),
-            (Vec2d(1120, 698.5), (80, 25), 'static', -0.8)
+            (Vec2d(700, 686), (40, 50), 'static', 0),
+            (Vec2d(860, 636), (360, 50), 'static', 0),
+            (Vec2d(1120, 682), (80, 25), 'static', -0.5),
+            (Vec2d(1180, 661), (40, 100), 'static', 0)
+
         ]
+        enemy_1 = Enemy(self.game.display, Vec2d(660, 307.5), (25, 25), self.space)
+        enemy_2 = Enemy(self.game.display, Vec2d(780, 686), (25, 25), self.space)
+        settings = Button(self.game, Vec2d(50, 25), (100, 50), 'settings', 18)
         self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
+        self.enemies.add(enemy_1, enemy_2)
+        self.elements.add(settings)

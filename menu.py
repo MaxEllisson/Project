@@ -63,8 +63,8 @@ class Menu:
                                         self.game.change_state(5)
                                         self.game.states[5].restart()
                                     elif self.game.state_history[-1] == 7:
-                                        self.game.change_state(5)
-                                        self.game.states[5].restart()
+                                        self.game.change_state(7)
+                                        self.game.states[7].restart()
                                 case "class 1":
                                     self.game.change_state(4)
                                     self.game.class_choice = 1
