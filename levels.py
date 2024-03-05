@@ -144,21 +144,6 @@ class Level1(Level):
         self.image = self.game.images['game_background']
         self.image = pg.transform.scale(self.image, (1280, 720))
         floor = Floor(self.game.display, (0, 720), (1280, 720), self.space)
-        '''
-        block_1 = Block(self.game, Vec2d(75, 620), (150, 200), self.space, 'static', 0)
-        block_2 = Block(self.game, Vec2d(200, 532), (120, 25), self.space, 'static', 0)
-        block_3 = Block(self.game, Vec2d(370, 690), (256, 50), self.space, 'static', 0)
-        block_4 = Block(self.game, Vec2d(600, 610), (225, 71), self.space, 'static', -0.8)
-        block_5 = Block(self.game, Vec2d(853, 586), (85, 250), self.space, 'static', 0)
-        block_6 = Block(self.game, Vec2d(1024, 586), (85, 250), self.space, 'static', 0)
-        block_7 = Block(self.game, Vec2d(1195, 586), (85, 250), self.space, 'static', 0)
-        block_8 = Block(self.game, Vec2d(1024, 411), (427, 100), self.space, 'static', 0)
-        block_9 = Block(self.game, Vec2d(1024, 311), (50, 200), self.space, 'dynamic', 0)
-        block_10 = Block(self.game, Vec2d(896, 111), (13, 100), self.space, 'static', 0)
-        block_11 = Block(self.game, Vec2d(1024, 151), (171, 50), self.space, 'dynamic', 0)
-        block_12 = Block(self.game, Vec2d(1152, 111), (13, 100), self.space, 'static', 0)
-        block_13 = Block(self.game, Vec2d(1024, 47), (280, 25), self.space, 'static', 0)
-        '''
         blocks = [
             (Vec2d(75, 620), (150, 200), 'static', 0),
             (Vec2d(200, 532), (120, 25), 'static', 0),
@@ -193,6 +178,7 @@ class Level2(Level):
             (Vec2d(80, 620), (160, 200), 'static', 0),
             (Vec2d(660, 520), (40, 400), 'dynamic', 0),
             (Vec2d(700, 695), (40, 50), 'dynamic', 0),
-            (Vec2d(860, ))
+            (Vec2d(860, 645), (260, 50), 'static', 0),
+            (Vec2d(1120, 698.5), (80, 25), 'static', -0.8)
         ]
         self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))

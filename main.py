@@ -48,9 +48,9 @@ class Game:
         self.state = 1
         self.states = {
             1: StartMenu(self),
-            2: LevelMenu(self),
+            2: ClassMenu(self),
             3: OptionsMenu(self),
-            4: ClassMenu(self),
+            4: LevelMenu(self),
             5: Level1(self),
             6: GameMenu(self),
             7: Level2(self)

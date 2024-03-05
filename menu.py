@@ -55,19 +55,22 @@ class Menu:
                                 case "back":
                                     self.game.change_state(self.game.state_history[-1])
                                 case "level 1":
-                                    self.game.change_state(4)
+                                    self.game.change_state(5)
                                 case "level 2":
                                     self.game.change_state(7)
-                                case "class 1":
-                                    self.game.change_state(5)
-                                    self.game.class_choice = 1
-                                case "class 2":
-                                    self.game.change_state(5)
-                                    self.game.class_choice = 2
                                 case "restart":
                                     if self.game.state_history[-1] == 5:
                                         self.game.change_state(5)
                                         self.game.states[5].restart()
+                                    elif self.game.state_history[-1] == 7:
+                                        self.game.change_state(5)
+                                        self.game.states[5].restart()
+                                case "class 1":
+                                    self.game.change_state(4)
+                                    self.game.class_choice = 1
+                                case "class 2":
+                                    self.game.change_state(4)
+                                    self.game.class_choice = 2
 
                         self.game.in_menu = False
 
