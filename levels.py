@@ -2,7 +2,7 @@ import math
 import os
 import pymunk as pm
 import pygame as pg
-from spritess import Floor, Block, Ball, Button, PowerSlider, AngleGraphic, MusicSlider, Enemy
+from spritess import Floor, Block, Ball, Button, PowerSlider, AngleGraphic, MusicSlider, Enemy, ShotIndicator
 from pymunk import Vec2d
 
 
@@ -75,9 +75,9 @@ class Level:
                     current_weapon.launch(self.shot_power, self.shot_angle)
                 match event.key:
                     case pg.K_d if self.shot_power < 1000:
-                        self.shot_power += 100
+                        self.shot_power += 10
                     case pg.K_a if self.shot_power > 0:
-                        self.shot_power -= 100
+                        self.shot_power -= 10
                     case pg.K_w if self.shot_angle < 90:
                         self.shot_angle += 1
                     case pg.K_s if self.shot_angle > 0:
@@ -121,6 +121,8 @@ class Level:
             for elements in self.elements:
                 if isinstance(elements, Button):
                     elements.draw()
+                if isinstance(elements, ShotIndicator):
+                    elements.draw(self.shot_angle)
             for weapons in self.weapons:
                 if isinstance(weapons, Ball):
                     weapons.draw_ball()
@@ -163,10 +165,11 @@ class Level1(Level):
         enemy_1 = Enemy(self.game.display, Vec2d(200, 696), (25, 25), self.space)
         enemy_2 = Enemy(self.game.display, Vec2d(1024, 86), (25, 25), self.space)
         settings = Button(self.game, Vec2d(50, 25), (100, 50), 'settings', 18)
+        arrow = ShotIndicator(self.game.display, (100, 510))
 
         self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
         self.enemies.add(enemy_1, enemy_2)
-        self.elements.add(settings)
+        self.elements.add(settings, arrow)
 
 
 class Level2(Level):

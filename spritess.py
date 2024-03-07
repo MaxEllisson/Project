@@ -111,7 +111,7 @@ class Block(pg.sprite.Sprite):
 
         pg.draw.polygon(self.game.display, 'blue', vertex)
         if hasattr(self, 'image'):
-            #self.image = pg.transform.rotate(self.image, math.degrees(-self.block.angle))
+            # self.image = pg.transform.rotate(self.image, math.degrees(-self.block.angle))
             self.game.display.blit(self.image, self.block.position - (self.width // 2, self.height // 2))
 
 
@@ -261,3 +261,17 @@ class MusicSlider(pg.sprite.Sprite):
         if self.x <= mouse_pos[0] <= self.x + self.width and self.y <= mouse_pos[1] <= self.y + self.height:
             return True
 
+
+class ShotIndicator(pg.sprite.Sprite):
+    def __init__(self, display, start):
+        pg.sprite.Sprite.__init__(self)
+        self.display = display
+        self.start = start
+        self.length = 20
+        self.width = 10
+
+    def draw(self, angle):
+        pg.draw.line(self.display, 'blue', self.start,
+                     (self.start[0] + round((self.length * math.cos(angle * 2 * math.pi / 180)),
+                                            (self.start[1] - round(
+                                                (self.length * math.sin(angle * 2 * math.pi / 180)))))), self.width)
