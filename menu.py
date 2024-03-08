@@ -71,8 +71,12 @@ class Menu:
                                 case "class 2":
                                     self.game.change_state(4)
                                     self.game.class_choice = 2
-                                case "Main Menu":
+                                case "main menu":
                                     self.game.change_state(1)
+                                case "quit game":
+                                    self.game.running = False
+                                case "resume":
+                                    self.game.in_menu = True
                         self.game.in_menu = False
 
 
@@ -123,10 +127,10 @@ class GameSettingsMenu(Menu):
     def __init__(self, game):
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Settings', 50)
-        resume = Button(self.game, (500, 300), (280, 100), 'Resume', 50)
-        restart = Button(self.game, (500, 450), (280, 100), 'Restart', 50)
-        main_menu = Button(self.game, (500, 600), (280, 100), 'Main Menu', 50)
-        quit_game = Button(self.game, (800, 600), (120, 120), 'Quit m', 50)
+        resume = Button(self.game, (500, 300), (280, 100), 'resume', 50)
+        restart = Button(self.game, (500, 450), (280, 100), 'restart', 50)
+        main_menu = Button(self.game, (500, 600), (280, 100), 'main menu', 50)
+        quit_game = Button(self.game, (800, 600), (120, 120), 'quit game', 50)
         self.elements.add(title, resume, restart, main_menu, quit_game)
 
 

@@ -90,6 +90,7 @@ class Level:
                             case 'settings':
                                 self.game.change_state(6)
                                 self.game.states[6].run()
+                        self.game.in_game = False
         if current_weapon.is_shot:
             if current_weapon.time_after_collision > 8:
                 current_weapon.remove()

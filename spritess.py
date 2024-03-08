@@ -115,31 +115,6 @@ class Block(pg.sprite.Sprite):
             self.game.display.blit(self.image, self.block.position - (self.width // 2, self.height // 2))
 
 
-'''
-class Triangle(pg.sprite.Sprite):
-    def __init__(self, display, pos, space, mass, coords):
-        pg.sprite.Sprite.__init__(self)
-        self.display = display
-        ((self.x, self.y), (self.x_2, self.y_2), (self.x_3, self.y_3)) = coords
-        self.triangle_shape = pm.Poly(None, ((self.x, self.y), (self.x_2, self.y_2), (self.x_3, self.y_3)))
-        self.triangle_mass = mass
-        self.triangle_moment = pm.moment_for_poly(self.triangle_mass, self.triangle_shape.get_vertices())
-        self.triangle_body = pm.Body(self.triangle_mass, self.triangle_moment)
-        self.triangle_body.position = pos
-        self.triangle_shape = self.triangle_body
-        space.add(self.triangle_body, self.triangle_shape)
-
-    def draw_triangle(self):
-        vertex = []
-        for point in self.corners:
-            updated_point = (point.rotated(self.triangle_shape.body.angle) + self.triangle.position)
-            vertex.append(pygame_util.to_pygame(updated_point, self.display))
-
-        pg.draw.polygon(self.display, 'blue', vertex)
-
-'''
-
-
 class Weapons(pg.sprite.Sprite):
     def __init__(self, display, pos: Vec2d, radius, space, mass, friction, elasticity):
         pg.sprite.Sprite.__init__(self)
