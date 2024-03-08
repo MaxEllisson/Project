@@ -177,10 +177,11 @@ class Ball(Weapons):
 
     def launch(self, shot_power, shot_angle):
         self.body.angle = math.radians(shot_angle)
-        self.body.apply_impulse_at_local_point(8 * shot_power * Vec2d(1, 0))
+        self.body.apply_impulse_at_local_point(7 * shot_power * Vec2d(1, 0))
         self.is_shot = True
 
-
+class Arrow(Weapons):
+    pass
 class PowerSlider(pg.sprite.Sprite):
     def __init__(self, display, pos, size):
         pg.sprite.Sprite.__init__(self)
@@ -267,11 +268,11 @@ class ShotIndicator(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.display = display
         self.start = start
-        self.length = 20
+        self.length = 70
         self.width = 10
 
     def draw(self, angle):
         pg.draw.line(self.display, 'blue', self.start,
-                     (self.start[0] + round((self.length * math.cos(angle * 2 * math.pi / 180)),
-                                            (self.start[1] - round(
-                                                (self.length * math.sin(angle * 2 * math.pi / 180)))))), self.width)
+                     (self.start[0] + int((self.length * math.cos(math.radians(angle)))),
+                                       (self.start[1] -
+                                        int((self.length * math.sin(math.radians(angle)))))), self.width)

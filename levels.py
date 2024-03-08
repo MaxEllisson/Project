@@ -190,6 +190,7 @@ class Level2(Level):
         enemy_1 = Enemy(self.game.display, Vec2d(660, 307.5), (25, 25), self.space)
         enemy_2 = Enemy(self.game.display, Vec2d(780, 686), (25, 25), self.space)
         settings = Button(self.game, Vec2d(50, 25), (100, 50), 'settings', 18)
+        arrow = ShotIndicator(self.game.display, (100, 510))
         self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
         self.enemies.add(enemy_1, enemy_2)
-        self.elements.add(settings)
+        self.elements.add(settings, arrow)

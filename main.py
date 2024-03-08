@@ -2,7 +2,7 @@
 
 import pygame as pg
 import pymunk as pm
-from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameMenu
+from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameSettingsMenu, PostGameMenu
 from levels import Level1, Level2
 import os
 
@@ -52,8 +52,9 @@ class Game:
             3: OptionsMenu(self),
             4: LevelMenu(self),
             5: Level1(self),
-            6: GameMenu(self),
-            7: Level2(self)
+            6: GameSettingsMenu(self),
+            7: Level2(self),
+            8: PostGameMenu(self)
         }
 
     def change_state(self, state):

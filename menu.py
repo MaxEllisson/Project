@@ -119,7 +119,7 @@ class ClassMenu(Menu):
         self.elements.add(title, class1, class2, back)
 
 
-class GameMenu(Menu):
+class GameSettingsMenu(Menu):
     def __init__(self, game):
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Settings', 50)
@@ -129,3 +129,12 @@ class GameMenu(Menu):
         quit_game = Button(self.game, (800, 600), (120, 120), 'Quit m', 50)
         self.elements.add(title, resume, restart, main_menu, quit_game)
 
+
+class PostGameMenu(Menu):
+    def __init__(self, game):
+        super().__init__(game)
+        title = Label(self.game, (540, 100), (200, 100), 'Finished', 50)
+        next_level = Button(self.game, (500, 300), (280, 100), 'Next Level', 50)
+        play_again = Button(self.game, (500, 450), (280, 100), 'Play Again', 50)
+        main_menu = Button(self.game, (500, 600), (280, 100), 'Main Menu', 50)
+        self.elements.add(title, next_level, play_again, main_menu)
