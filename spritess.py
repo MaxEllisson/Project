@@ -1,5 +1,4 @@
 import math
-
 import pygame as pg
 import pymunk as pm
 from pymunk import pygame_util
@@ -155,8 +154,11 @@ class Ball(Weapons):
         self.body.apply_impulse_at_local_point(7 * shot_power * Vec2d(1, 0))
         self.is_shot = True
 
+
 class Arrow(Weapons):
     pass
+
+
 class PowerSlider(pg.sprite.Sprite):
     def __init__(self, display, pos, size):
         pg.sprite.Sprite.__init__(self)
@@ -247,7 +249,7 @@ class ShotIndicator(pg.sprite.Sprite):
         self.width = 10
 
     def draw(self, angle):
-        pg.draw.line(self.display, 'blue', self.start,
+        pg.draw.line(self.display, 'white', self.start,
                      (self.start[0] + int((self.length * math.cos(math.radians(angle)))),
-                                       (self.start[1] -
-                                        int((self.length * math.sin(math.radians(angle)))))), self.width)
+                      (self.start[1] -
+                       int((self.length * math.sin(math.radians(angle)))))), self.width)

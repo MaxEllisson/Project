@@ -1,7 +1,6 @@
 """ This is the main module, it contains classes to do ..."""
 
 import pygame as pg
-import pymunk as pm
 from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameSettingsMenu, PostGameMenu
 from levels import Level1, Level2
 import os
@@ -19,7 +18,8 @@ class Game:
         self.clock = pg.time.Clock()
         self.class_choice = None
         self.volume = 1
-        self.state_history = []
+        self.state_stack = [1]
+        self.level_pointer = None
         pg.mixer.music.set_volume(self.volume)
         self.soundtracks = {
             'menu_music': pg.mixer.music.load(
@@ -48,9 +48,9 @@ class Game:
         self.state = 1
         self.states = {
             1: StartMenu(self),
-            2: ClassMenu(self),
+            2: LevelMenu(self),
             3: OptionsMenu(self),
-            4: LevelMenu(self),
+            4: ClassMenu(self),
             5: Level1(self),
             6: GameSettingsMenu(self),
             7: Level2(self),
@@ -58,8 +58,13 @@ class Game:
         }
 
     def change_state(self, state):
-        self.state_history.append(self.state)
-        self.state = state
+        self.state_stack.append(state)
+
+    def reset_state_stack(self):
+        self.state_stack = [1]
+
+    def get_state(self):
+        return self.state_stack[-1]
 
     def run(self):
         pg.mixer.music.load(os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
@@ -70,7 +75,7 @@ class Game:
                 if event.type == pg.QUIT:
                     self.running = False
             self.display.fill((0, 0, 0))
-            self.states[self.state].run()
+            self.states[self.state_stack[-1]].run()
             pg.display.update()
             self.clock.tick(60)
 

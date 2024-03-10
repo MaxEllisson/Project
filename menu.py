@@ -1,6 +1,6 @@
 import pygame as pg
 from spritess import Button, Label, MusicSlider
-import os
+
 
 
 class Menu:
@@ -53,31 +53,43 @@ class Menu:
                                 case "options":
                                     self.game.change_state(3)
                                 case "back":
-                                    self.game.change_state(self.game.state_history[-1])
+                                    self.game.state_stack.pop()
                                 case "level 1":
-                                    self.game.change_state(5)
-                                case "level 2":
-                                    self.game.change_state(7)
-                                case "restart":
-                                    if self.game.state_history[-1] == 5:
-                                        self.game.change_state(5)
-                                        self.game.states[5].restart()
-                                    elif self.game.state_history[-1] == 7:
-                                        self.game.change_state(7)
-                                        self.game.states[7].restart()
-                                case "class 1":
                                     self.game.change_state(4)
+                                    self.game.level_pointer = 1
+                                case "level 2":
+                                    self.game.change_state(4)
+                                    self.game.level_pointer = 2
+                                case "restart":
+                                    self.game.state_stack.pop()
+                                    self.game.states[self.game.state_stack[-1]].restart()
+                                case "class 1":
+                                    if self.game.level_pointer == 1:
+                                        self.game.change_state(5)
+                                    else:
+                                        self.game.change_state(7)
                                     self.game.class_choice = 1
                                 case "class 2":
-                                    self.game.change_state(4)
+                                    if self.game.level_pointer == 1:
+                                        self.game.change_state(5)
+                                    else:
+                                        self.game.change_state(7)
                                     self.game.class_choice = 2
                                 case "main menu":
-                                    self.game.change_state(1)
+                                    self.game.reset_state_stack()
+                                    self.game.in_game = False
                                 case "quit game":
+                                    self.game.in_game = False
                                     self.game.running = False
                                 case "resume":
-                                    self.game.in_menu = True
-                        self.game.in_menu = False
+                                    self.game.state_stack.pop()
+                                case "play again":
+                                    self.game.state_stack.pop()
+                                    self.game.states[self.game.state_stack[-1]].restart()
+                                case "next level":
+                                    self.game.level_pointer = 2
+                                    self.game.change_state(4)
+                            self.game.in_menu = False
 
 
 class StartMenu(Menu):
@@ -137,8 +149,18 @@ class GameSettingsMenu(Menu):
 class PostGameMenu(Menu):
     def __init__(self, game):
         super().__init__(game)
-        title = Label(self.game, (540, 100), (200, 100), 'Finished', 50)
-        next_level = Button(self.game, (500, 300), (280, 100), 'Next Level', 50)
-        play_again = Button(self.game, (500, 450), (280, 100), 'Play Again', 50)
-        main_menu = Button(self.game, (500, 600), (280, 100), 'Main Menu', 50)
-        self.elements.add(title, next_level, play_again, main_menu)
+
+    def create_buttons(self, status):
+        if status == 1:
+            title = Label(self.game, (540, 100), (200, 100), 'Victory', 50)
+        else:
+            title = Label(self.game, (540, 100), (200, 100), 'Defeat', 50)
+        if self.game.level_pointer == 1 and status == 1:
+            next_level = Button(self.game, (500, 300), (280, 100), 'Next Level', 50)
+            play_again = Button(self.game, (500, 450), (280, 100), 'Play Again', 50)
+            main_menu = Button(self.game, (500, 600), (280, 100), 'Main Menu', 50)
+            self.elements.add(title, next_level, play_again, main_menu)
+        else:
+            play_again = Button(self.game, (500, 300), (280, 100), 'Play Again', 50)
+            main_menu = Button(self.game, (500, 450), (280, 100), 'Main Menu', 50)
+            self.elements.add(title, play_again, main_menu)

@@ -1,5 +1,3 @@
-import math
-import os
 import pymunk as pm
 import pygame as pg
 from spritess import Floor, Block, Ball, Button, PowerSlider, AngleGraphic, MusicSlider, Enemy, ShotIndicator
@@ -90,7 +88,7 @@ class Level:
                             case 'settings':
                                 self.game.change_state(6)
                                 self.game.states[6].run()
-                        self.game.in_game = False
+
         if current_weapon.is_shot:
             if current_weapon.time_after_collision > 8:
                 current_weapon.remove()
@@ -137,6 +135,10 @@ class Level:
             pg.display.update()
             self.game.clock.tick(165)
             self.space.step(1 / 165)
+        if self.status() != 3:
+            self.game.change_state(8)
+            self.game.states[self.game.get_state()].create_buttons(self.status())
+            self.game.states[self.game.get_state()].run()
 
 
 class Level1(Level):
