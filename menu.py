@@ -2,7 +2,6 @@ import pygame as pg
 from spritess import Button, Label, MusicSlider
 
 
-
 class Menu:
     def __init__(self, game):
         self.game = game
@@ -20,7 +19,7 @@ class Menu:
                 self.game.display.blit(self.image, (0, 0))
             for element in self.elements:
                 if isinstance(element, MusicSlider):
-                    element.draw_volume(self.volume)
+                    element.draw(self.volume)
                 else:
                     element.draw()
 

@@ -1,4 +1,5 @@
-""" This is the main module, it contains classes to do ..."""
+""" This is the main module, it is the class which contains the main game loop and is the wrapper of all the other
+classes. It also contains all the images, sounds, and the state stack which links to the state dictionary"""
 
 import pygame as pg
 from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameSettingsMenu, PostGameMenu
@@ -8,6 +9,7 @@ import os
 
 class Game:
     """
+
     """
 
     def __init__(self):
