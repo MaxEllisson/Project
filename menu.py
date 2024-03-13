@@ -1,19 +1,32 @@
+"""
+This is the Menu module, it contains the parent Menu class and its children: StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameSettingsMenu, PostGameMenu
+"""
 import pygame as pg
 from spritess import Button, Label, MusicSlider
 
 
 class Menu:
     def __init__(self, game):
+        """
+        Parameters
+        ----------
+        game : The instance of the Game class providing access to its attributes and methods
+
+        Initializes the common attributes among its children
+        """
         self.game = game
+        self.in_menu = True
         self.elements = pg.sprite.Group()
         self.image = None
         self.music = None
         self.volume = self.game.volume
 
     def run(self):
-        print(self.game.state_stack)
-        self.game.in_menu = True
-        while self.game.in_menu:
+        """
+        This loop handles the interactivity and drawing of the menus
+        """
+        self.in_menu = True
+        while self.in_menu:
             self.check_events()
             self.game.display.fill("red")
             if self.image is not None:
@@ -28,6 +41,9 @@ class Menu:
             self.game.clock.tick(165)
 
     def check_events(self):
+        """
+        The event handling which controls the interactivity that has been abstracted from the run method
+        """
         if pg.mouse.get_pressed()[0] == 1:
             for element in self.elements:
                 if isinstance(element, MusicSlider):
@@ -39,7 +55,7 @@ class Menu:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.game.running = False
-                self.game.in_menu = False
+                self.in_menu = False
             if event.type == pg.MOUSEBUTTONDOWN:
                 for element in self.elements:
                     if isinstance(element, Button):
@@ -90,11 +106,18 @@ class Menu:
                                 case "next level":
                                     self.game.level_pointer = 2
                                     self.game.change_state(4)
-                            self.game.in_menu = False
+                            self.in_menu = False
 
 
 class StartMenu(Menu):
     def __init__(self, game):
+        """
+        Parameters
+        ----------
+        game : The instance of the Game class providing access to its attributes and methods
+
+        Creates the Buttons and Labels of the Main Menu
+        """
         super().__init__(game)
         self.image = self.game.images['menu_background']
         self.image = pg.transform.scale(self.image, (1280, 720))
@@ -107,6 +130,13 @@ class StartMenu(Menu):
 
 class LevelMenu(Menu):
     def __init__(self, game):
+        """
+        Parameters
+        ----------
+        game : The instance of the Game class providing access to its attributes and methods
+
+        Creates the Buttons and Labels of the Main Menu
+        """
         super().__init__(game)
         self.image = self.game.images['menu_background']
         self.image = pg.transform.scale(self.image, (1280, 720))
@@ -119,6 +149,13 @@ class LevelMenu(Menu):
 
 class OptionsMenu(Menu):
     def __init__(self, game):
+        """
+        Parameters
+        ----------
+        game : The instance of the Game class providing access to its attributes and methods
+
+        Creates the buttons and labels of the in game Options Menu
+        """
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Volume', 50)
         back = Button(self.game, (50, 600), (250, 100), 'back', 50)
@@ -128,6 +165,13 @@ class OptionsMenu(Menu):
 
 class ClassMenu(Menu):
     def __init__(self, game):
+        """
+        Parameters
+        ----------
+        game : The instance of the Game class providing access to its attributes and methods
+
+        Creates the buttons and labels of the Class Menu
+        """
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Pick Your Class', 50)
         class1 = Button(self.game, (540, 410), (200, 100), 'class 1', 50)
@@ -138,6 +182,13 @@ class ClassMenu(Menu):
 
 class GameSettingsMenu(Menu):
     def __init__(self, game):
+        """
+        Parameters
+        ----------
+        game : The instance of the Game class providing access to its attributes and methods
+
+        Creates the buttons and labels of the in game Settings Menu
+        """
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Settings', 50)
         resume = Button(self.game, (500, 300), (280, 100), 'resume', 50)
@@ -152,6 +203,13 @@ class PostGameMenu(Menu):
         super().__init__(game)
 
     def create_buttons(self, status):
+        """
+        Parameters
+        ----------
+        status : An integer value which represents the state of the level (Win, Loss, Playing)
+
+        Creates Menu buttons and labels depending on the outcome of the Level
+        """
         self.elements.empty()
         if status == 1:
             title = Label(self.game, (540, 100), (200, 100), 'Victory', 50)
@@ -166,3 +224,5 @@ class PostGameMenu(Menu):
             play_again = Button(self.game, (500, 300), (280, 100), 'play again', 50)
             main_menu = Button(self.game, (500, 450), (280, 100), 'main menu', 50)
             self.elements.add(title, play_again, main_menu)
+
+

@@ -1,5 +1,4 @@
-""" This is the main module, it is the class which contains the main game loop and is the wrapper of all the other
-classes. It also contains all the images, sounds, and the state stack which links to the state dictionary"""
+""" This is the main module, it contains the Game class"""
 
 import pygame as pg
 from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameSettingsMenu, PostGameMenu
@@ -9,12 +8,13 @@ from levels import Level
 
 class Game:
     """
+    The Game class contains the main game loops and wraps the Menu and Level classes.
 
+    This initializes the variables required to run the game
     """
 
     def __init__(self):
         self.running = True
-        self.in_menu = True
         self.in_game = True
         self.display = pg.display.set_mode((1280, 720))
         self.clock = pg.time.Clock()
@@ -59,15 +59,37 @@ class Game:
         }
 
     def change_state(self, state):
+        """
+        Parameters
+        ----------
+        state : An integer representing the index of our state dictionary (self.states)
+
+        This method pushes the passed state onto the state manager stack (self.state_stack)
+
+        """
         self.state_stack.append(state)
 
     def reset_state_stack(self):
+        """
+        Sets state manager stack to its initial value
+        """
         self.state_stack = [1]
 
     def get_state(self):
+        """
+
+        Returns
+        -------
+        Top of stack
+
+        Gets top of stack which represents the current state
+        """
         return self.state_stack[-1]
 
     def run(self):
+        """
+        This is the main Game loop which runs the state at the top of the stack
+        """
         pg.mixer.music.load(os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
                                          'menumusic.mp3'))
         pg.mixer.music.play()

@@ -6,6 +6,14 @@ from pymunk import Vec2d
 
 class Level:
     def __init__(self, game):
+        """
+
+        Parameters
+        ----------
+        game : The instance of the Game class providing access to its attributes and methods
+
+        This initializes the variables required to run the level
+        """
         self.enemy_list = None
         self.current_weapon = None
         self.times = 0
@@ -32,11 +40,28 @@ class Level:
         self.sliders.add(slider_1, slider_2)
 
     def restart(self):
+        """
+        Method which re-initializes the level and loads the respective class and level data
+        """
         self.__init__(self.game)
         self.load_class()
         self.load_level()
 
     def collision_weapon_enemy(self, arbiter, space, data):
+        """
+
+        Parameters
+        ----------
+        arbiter : Encapsulates a pair of colliding shapes and all the data about their collision.
+        space : The basic unit of simulation in Pymunk
+        data : A dictionary which gets passed onto the callbacks
+
+        Returns
+        -------
+        True: When two bodies collide
+
+        Checks which bodies have collided. If the two bodies are a weapon and an enemy, the enemy is removed from the game.
+        """
         shape1, shape2 = arbiter.shapes
         self.enemy_list = self.enemies.sprites()
         for enemy in self.enemy_list:
@@ -46,6 +71,16 @@ class Level:
         return True
 
     def status(self):
+        """
+
+        Returns
+        -------
+        Win: If there are no enemies left
+        Lose: If there are enemies still remaining after all weapons have been launched
+        Playing: When the player still has remaining weapons and enemies are still present
+
+        Returns an integer which represents the state of the level
+        """
         self.states = {'Win': 1, 'Lose': 2, 'Playing': 3}
         if len(self.weapons) >= 0 and len(self.enemies) == 0:
             return self.states['Win']
@@ -55,6 +90,9 @@ class Level:
             return self.states['Playing']
 
     def load_class(self):
+        """
+        Loads chosen load-out into weapons sprites group
+        """
         if self.game.class_choice == 1:
             self.weapons.add(Ball(self.game.display, Vec2d(100, 510), 10, self.space, 2, 0.5, 0.5))
             self.weapons.add(Ball(self.game.display, Vec2d(30, 100), 10, self.space, 2, 0.5, 0.5))
@@ -66,6 +104,9 @@ class Level:
             self.weapons.add(Ball(self.game.display, Vec2d(80, 100), 10, self.space, 2, 0.5, 0.5))
 
     def load_level(self):
+        """
+        Loads chosen Level data into shapes and enemies sprite groups
+        """
         if self.game.level_pointer == 1:
             self.image = self.game.images['game_background']
             self.image = pg.transform.scale(self.image, (1280, 720))
@@ -92,7 +133,6 @@ class Level:
             self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
             self.enemies.add(enemy_1, enemy_2)
 
-
         elif self.game.level_pointer == 2:
             self.image = self.game.images['game_background']
             self.image = pg.transform.scale(self.image, (1280, 720))
@@ -112,6 +152,9 @@ class Level:
             self.enemies.add(enemy_1, enemy_2)
 
     def check_events(self):
+        """
+        Handles the events of the level and is abstracted from the run method
+        """
         current_weapon = self.weapons.sprites()[0]
         if len(self.weapons) > 1:
             next_weapon = self.weapons.sprites()[1]
@@ -150,15 +193,16 @@ class Level:
             current_weapon.time_after_collision = current_weapon.time_after_collision + 1 / 165
 
     def run(self):
+        """
+        This loop handles the interactivity and drawing of the level
+        """
         pg.mixer.music.stop()
         # insert loading new track
         # insert pg.mixer.music.play()
-        print(self.game.state_stack)
         self.restart()
         self.game.in_game = True
         self.shot_power = 100
         self.shot_angle = 0
-        print(self.status())
         while self.status() == 3 and self.game.in_game:
             self.check_events()
             self.game.display.fill('red')
