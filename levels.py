@@ -166,9 +166,9 @@ class Level:
                 self.game.display.blit(self.image, (0, 0))
             for shapes in self.shapes:
                 if isinstance(shapes, Block):
-                    shapes.draw_block()
+                    shapes.draw()
                 elif isinstance(shapes, Floor):
-                    shapes.draw_floor()
+                    shapes.draw()
             for elements in self.elements:
                 if isinstance(elements, Button):
                     elements.draw()
@@ -176,14 +176,14 @@ class Level:
                     elements.draw(self.shot_angle)
             for weapons in self.weapons:
                 if isinstance(weapons, Ball):
-                    weapons.draw_ball()
+                    weapons.draw()
             for sliders in self.sliders:
                 if isinstance(sliders, PowerSlider):
-                    sliders.draw_power(self.shot_power)
+                    sliders.draw(self.shot_power)
                 if isinstance(sliders, AngleGraphic):
-                    sliders.draw_angle(self.shot_angle)
+                    sliders.draw(self.shot_angle)
             for enemy in self.enemies:
-                enemy.draw_enemy()
+                enemy.draw()
             pg.display.update()
             self.game.clock.tick(165)
             self.space.step(1 / 165)

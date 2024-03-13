@@ -73,7 +73,7 @@ class Floor(pg.sprite.Sprite):
         self.base_shape.friction = 0.7
         space.add(self.base, self.base_shape)
 
-    def draw_floor(self):
+    def draw(self):
         pg.draw.line(self.display, 'blue', start_pos=pygame_util.to_pygame(self.start, self.display),
                      end_pos=pygame_util.to_pygame(
                          self.end, self.display), width=18)
@@ -102,7 +102,7 @@ class Block(pg.sprite.Sprite):
         self.block_shape.friction = 0.7
         space.add(self.block, self.block_shape)
 
-    def draw_block(self):
+    def draw(self):
         vertex = []
         for point in self.corners:
             updated_point = (point.rotated(self.block_shape.body.angle) + self.block.position)
@@ -145,7 +145,7 @@ class Ball(Weapons):
         pg.sprite.Sprite.__init__(self)
         self.center = None
 
-    def draw_ball(self):
+    def draw(self):
         self.center = pygame_util.to_pygame(self.body.position, self.display)
         pg.draw.circle(self.display, 'blue', self.center, self.radius + 1)
 
@@ -168,7 +168,7 @@ class PowerSlider(pg.sprite.Sprite):
         self.rect_in = pg.Rect((self.x, self.y), (self.width, self.height))
         self.rect_out = pg.Rect((self.x, self.y), (self.width, self.height))
 
-    def draw_power(self, power):
+    def draw(self, power):
         percentage = (power / 1000)
         self.rect_in.width = self.width * percentage
         pg.draw.rect(self.display, 'blue', self.rect_out, 5)
@@ -184,7 +184,7 @@ class AngleGraphic(pg.sprite.Sprite):
         self.rect_in = pg.Rect((self.x, self.y), (self.width, self.height))
         self.rect_out = pg.Rect((self.x, self.y), (self.width, self.height))
 
-    def draw_angle(self, angle):
+    def draw(self, angle):
         percentage = (angle / 90)
         self.rect_in.width = self.width * percentage
         pg.draw.rect(self.display, 'blue', self.rect_out, 5)
@@ -207,7 +207,7 @@ class Enemy(pg.sprite.Sprite):
         self.space = space
         self.space.add(self.body, self.body_shape)
 
-    def draw_enemy(self):
+    def draw(self):
         vertex = []
         for point in self.corners:
             updated_point = (point.rotated(self.body_shape.body.angle) + self.body.position)
@@ -228,7 +228,7 @@ class MusicSlider(pg.sprite.Sprite):
         self.rect_in = pg.Rect((self.x, self.y), (self.width, self.height))
         self.rect_out = pg.Rect((self.x, self.y), (self.width, self.height))
 
-    def draw_volume(self, volume):
+    def draw(self, volume):
         percentage = (volume / 1)
         self.rect_in.width = self.width * percentage
         pg.draw.rect(self.display, 'black', self.rect_in)
