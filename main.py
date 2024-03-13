@@ -2,8 +2,8 @@
 
 import pygame as pg
 from menu import StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameSettingsMenu, PostGameMenu
-from levels import Level1, Level2
 import os
+from levels import Level
 
 
 class Game:
@@ -51,9 +51,8 @@ class Game:
             2: LevelMenu(self),
             3: OptionsMenu(self),
             4: ClassMenu(self),
-            5: Level1(self),
+            5: Level(self),
             6: GameSettingsMenu(self),
-            7: Level2(self),
             8: PostGameMenu(self)
         }
 

@@ -2,7 +2,6 @@ import pygame as pg
 from spritess import Button, Label, MusicSlider
 
 
-
 class Menu:
     def __init__(self, game):
         self.game = game
@@ -12,6 +11,7 @@ class Menu:
         self.volume = self.game.volume
 
     def run(self):
+        print(self.game.state_stack)
         self.game.in_menu = True
         while self.game.in_menu:
             self.check_events()
@@ -61,7 +61,9 @@ class Menu:
                                     self.game.change_state(4)
                                     self.game.level_pointer = 2
                                 case "restart":
+                                    print(self.game.state_stack)
                                     self.game.state_stack.pop()
+                                    print(self.game.state_stack)
                                     self.game.states[self.game.state_stack[-1]].restart()
                                 case "class 1":
                                     if self.game.level_pointer == 1:
@@ -85,7 +87,6 @@ class Menu:
                                     self.game.state_stack.pop()
                                 case "play again":
                                     self.game.state_stack.pop()
-                                    self.game.states[self.game.state_stack[-1]].restart()
                                 case "next level":
                                     self.game.level_pointer = 2
                                     self.game.change_state(4)
@@ -151,16 +152,17 @@ class PostGameMenu(Menu):
         super().__init__(game)
 
     def create_buttons(self, status):
+        self.elements.empty()
         if status == 1:
             title = Label(self.game, (540, 100), (200, 100), 'Victory', 50)
-        else:
+        elif status == 2:
             title = Label(self.game, (540, 100), (200, 100), 'Defeat', 50)
-        if self.game.level_pointer == 1 and status == 1:
-            next_level = Button(self.game, (500, 300), (280, 100), 'Next Level', 50)
-            play_again = Button(self.game, (500, 450), (280, 100), 'Play Again', 50)
-            main_menu = Button(self.game, (500, 600), (280, 100), 'Main Menu', 50)
+        if self.game.level_pointer == 1 and status == 2:
+            next_level = Button(self.game, (500, 300), (280, 100), 'next level', 50)
+            play_again = Button(self.game, (500, 450), (280, 100), 'play again', 50)
+            main_menu = Button(self.game, (500, 600), (280, 100), 'main menu', 50)
             self.elements.add(title, next_level, play_again, main_menu)
         else:
-            play_again = Button(self.game, (500, 300), (280, 100), 'Play Again', 50)
-            main_menu = Button(self.game, (500, 450), (280, 100), 'Main Menu', 50)
+            play_again = Button(self.game, (500, 300), (280, 100), 'play again', 50)
+            main_menu = Button(self.game, (500, 450), (280, 100), 'main menu', 50)
             self.elements.add(title, play_again, main_menu)
