@@ -85,13 +85,13 @@ class Menu:
                                     if self.game.level_pointer == 1:
                                         self.game.change_state(5)
                                     else:
-                                        self.game.change_state(7)
+                                        self.game.change_state(5)
                                     self.game.class_choice = 1
                                 case "class 2":
                                     if self.game.level_pointer == 1:
                                         self.game.change_state(5)
                                     else:
-                                        self.game.change_state(7)
+                                        self.game.change_state(5)
                                     self.game.class_choice = 2
                                 case "main menu":
                                     self.game.reset_state_stack()
@@ -215,7 +215,7 @@ class PostGameMenu(Menu):
             title = Label(self.game, (540, 100), (200, 100), 'Victory', 50)
         elif status == 2:
             title = Label(self.game, (540, 100), (200, 100), 'Defeat', 50)
-        if self.game.level_pointer == 1 and status == 2:
+        if self.game.level_pointer == 1 and status == 1:
             next_level = Button(self.game, (500, 300), (280, 100), 'next level', 50)
             play_again = Button(self.game, (500, 450), (280, 100), 'play again', 50)
             main_menu = Button(self.game, (500, 600), (280, 100), 'main menu', 50)
