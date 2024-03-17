@@ -190,7 +190,7 @@ class Level:
                 self.weapons.remove(current_weapon)
                 if len(self.weapons) > 0:
                     next_weapon.load_weapon()
-            current_weapon.time_after_collision = current_weapon.time_after_collision + 1 / 165
+            current_weapon.time_after_collision += 1/165
 
     def run(self):
         """
@@ -216,8 +216,9 @@ class Level:
             for elements in self.elements:
                 if isinstance(elements, Button):
                     elements.draw()
-                if isinstance(elements, ShotIndicator) and not self.weapons.sprites()[0].is_shot:
-                    elements.draw(self.shot_angle)
+                if len(self.weapons.sprites()) != 0:
+                    if isinstance(elements, ShotIndicator) and not self.weapons.sprites()[0].is_shot:
+                        elements.draw(self.shot_angle)
             for weapons in self.weapons:
                 if isinstance(weapons, Ball):
                     weapons.draw()
