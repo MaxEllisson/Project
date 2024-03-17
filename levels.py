@@ -31,13 +31,16 @@ class Level:
         self.elements = pg.sprite.Group()
         self.sliders = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
+        self.labels = pg.sprite.Group()
         settings = Button(self.game, Vec2d(50, 25), (100, 50), 'settings', 18)
         arrow = ShotIndicator(self.game.display, (100, 510))
         self.elements.add(settings, arrow)
-
-        slider_1 = PowerSlider(self.game.display, (50, 100), (200, 50))
-        slider_2 = AngleGraphic(self.game.display, (50, 175), (200, 50))
+        slider_1 = PowerSlider(self.game.display, (60, 100), (200, 50))
+        slider_2 = AngleGraphic(self.game.display, (60, 200), (200, 50))
         self.sliders.add(slider_1, slider_2)
+        power_label = Label(self.game, (70, 80), (100, 20), 'Power: A/D', 20)
+        angle_label = Label(self.game, (70, 180), (100, 20), 'Angle: S/W', 20)
+        self.labels.add(power_label, angle_label)
 
     def restart(self):
         """
@@ -229,6 +232,8 @@ class Level:
                     sliders.draw(self.shot_angle)
             for enemy in self.enemies:
                 enemy.draw()
+            for label in self.labels:
+                label.draw()
             pg.display.update()
             self.game.clock.tick(165)
             self.space.step(1 / 165)
