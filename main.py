@@ -24,12 +24,11 @@ class Game:
         self.level_pointer = None
         pg.mixer.music.set_volume(self.volume)
         self.soundtracks = {
-            'menu_music': pg.mixer.music.load(
-                os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
-                             'menumusic.mp3'))
+            'menu_music': os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks", 'menumusic.mp3'),
+            'level_music': os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks", 'levelmusic.mp3')
         }
         self.images = {
-            'game_background': pg.image.load(
+            'game_background_1': pg.image.load(
                 os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "Images",
                              "gamebackground.jpg")),
             'block_static_image': pg.image.load(
@@ -43,7 +42,10 @@ class Game:
                              'menubackground.jpg')),
             'button_image': pg.image.load(
                 os.path.join(os.path.dirname(os.path.realpath(__file__)), 'assets', 'Images',
-                             'buttonimage.jpg'))
+                             'buttonimage.jpg')),
+            'game_background_2': pg.image.load(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "Images",
+                             "gamebackground2.jpg"))
 
         }
 
@@ -90,9 +92,7 @@ class Game:
         """
         This is the main Game loop which runs the state at the top of the stack
         """
-        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
-                                         'menumusic.mp3'))
-        pg.mixer.music.play()
+
         while self.running:
             for event in pg.event.get():
                 if event.type == pg.QUIT:

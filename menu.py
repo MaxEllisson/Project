@@ -2,7 +2,7 @@
 This is the Menu module, it contains the parent Menu class and its children: StartMenu, LevelMenu, OptionsMenu, ClassMenu, GameSettingsMenu, PostGameMenu
 """
 import pygame as pg
-from spritess import Button, Label, MusicSlider
+from sprites import Button, Label, VolumeSlider
 
 
 class Menu:
@@ -20,19 +20,24 @@ class Menu:
         self.image = None
         self.music = None
         self.volume = self.game.volume
+        self.image = self.game.images['menu_background']
+        self.image = pg.transform.scale(self.image, (1280, 720))
 
     def run(self):
         """
         This loop handles the interactivity and drawing of the menus
         """
         self.in_menu = True
+        pg.mixer.music.stop()
+        pg.mixer.music.load(self.game.soundtracks['menu_music'])
+        pg.mixer.music.play()
         while self.in_menu:
             self.check_events()
             self.game.display.fill("red")
             if self.image is not None:
                 self.game.display.blit(self.image, (0, 0))
             for element in self.elements:
-                if isinstance(element, MusicSlider):
+                if isinstance(element, VolumeSlider):
                     element.draw(self.volume)
                 else:
                     element.draw()
@@ -46,7 +51,7 @@ class Menu:
         """
         if pg.mouse.get_pressed()[0] == 1:
             for element in self.elements:
-                if isinstance(element, MusicSlider):
+                if isinstance(element, VolumeSlider):
                     if element.is_hovered():
                         mouse_pos = pg.mouse.get_pos()
                         percentage = ((mouse_pos[0] - element.x) // (element.width / 100)) / 100
@@ -111,12 +116,10 @@ class StartMenu(Menu):
         Creates the Buttons and Labels of the Main Menu
         """
         super().__init__(game)
-        self.image = self.game.images['menu_background']
-        self.image = pg.transform.scale(self.image, (1280, 720))
-        button = Button(self.game, (540, 410), (200, 100), 'play', 50)
+        button = Button(self.game, (540, 410), (200, 100), 'play', 40)
         label = Label(self.game, (540, 100), (200, 100), 'PMPG', 50)
-        end = Button(self.game, (540, 560), (200, 100), 'quit', 50)
-        options = Button(self.game, (50, 600), (250, 100), 'options', 50)
+        end = Button(self.game, (540, 560), (200, 100), 'quit', 40)
+        options = Button(self.game, (50, 600), (250, 100), 'options', 40)
         self.elements.add(button, label, end, options)
 
 
@@ -130,12 +133,10 @@ class LevelMenu(Menu):
         Creates the Buttons and Labels of the Main Menu
         """
         super().__init__(game)
-        self.image = self.game.images['menu_background']
-        self.image = pg.transform.scale(self.image, (1280, 720))
-        level1 = Button(self.game, (540, 410), (200, 100), 'Level 1', 50)
-        level2 = Button(self.game, (540, 510), (200, 100), 'Level 2', 50)
+        level1 = Button(self.game, (540, 410), (200, 100), 'Level 1', 40)
+        level2 = Button(self.game, (540, 560), (200, 100), 'Level 2', 40)
         levels = Label(self.game, (540, 100), (200, 100), 'Levels', 50)
-        back = Button(self.game, (50, 600), (250, 100), 'back', 50)
+        back = Button(self.game, (50, 600), (250, 100), 'back', 40)
         self.elements.add(level1, level2, levels, back)
 
 
@@ -150,8 +151,8 @@ class OptionsMenu(Menu):
         """
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Volume', 50)
-        back = Button(self.game, (50, 600), (250, 100), 'back', 50)
-        volume_slider = MusicSlider(self.game.display, (390, 300), (500, 50))
+        back = Button(self.game, (50, 600), (250, 100), 'back', 40)
+        volume_slider = VolumeSlider(self.game.display, (390, 300), (500, 50))
         self.elements.add(title, back, volume_slider)
 
 
@@ -166,9 +167,9 @@ class ClassMenu(Menu):
         """
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Pick Your Class', 50)
-        class1 = Button(self.game, (540, 410), (200, 100), 'class 1', 50)
-        class2 = Button(self.game, (540, 510), (200, 100), 'class 2', 50)
-        back = Button(self.game, (50, 600), (250, 100), 'back', 50)
+        class1 = Button(self.game, (540, 410), (200, 100), 'class 1', 40)
+        class2 = Button(self.game, (540, 560), (200, 100), 'class 2', 40)
+        back = Button(self.game, (50, 600), (250, 100), 'back', 40)
         self.elements.add(title, class1, class2, back)
 
 
@@ -183,11 +184,13 @@ class GameSettingsMenu(Menu):
         """
         super().__init__(game)
         title = Label(self.game, (540, 100), (200, 100), 'Settings', 50)
-        resume = Button(self.game, (500, 300), (280, 100), 'resume', 50)
-        restart = Button(self.game, (500, 450), (280, 100), 'restart', 50)
-        main_menu = Button(self.game, (500, 600), (280, 100), 'main menu', 50)
-        quit_game = Button(self.game, (800, 600), (120, 120), 'quit game', 50)
-        self.elements.add(title, resume, restart, main_menu, quit_game)
+        resume = Button(self.game, (500, 300), (280, 100), 'resume', 40)
+        restart = Button(self.game, (500, 450), (280, 100), 'restart', 40)
+        main_menu = Button(self.game, (500, 600), (280, 100), 'main menu', 40)
+        quit_game = Button(self.game, (1000, 600), (220, 120), 'quit game', 35)
+        volume = Label(self.game, (540, 180), (200, 100), 'Volume', 30)
+        volume_slider = VolumeSlider(self.game.display, (390, 250), (500, 30))
+        self.elements.add(title, resume, restart, main_menu, quit_game, volume, volume_slider)
 
 
 class PostGameMenu(Menu):
@@ -208,13 +211,13 @@ class PostGameMenu(Menu):
         elif status == 2:
             title = Label(self.game, (540, 100), (200, 100), 'Defeat', 50)
         if self.game.level_pointer == 1 and status == 1:
-            next_level = Button(self.game, (500, 300), (280, 100), 'next level', 50)
-            play_again = Button(self.game, (500, 450), (280, 100), 'play again', 50)
-            main_menu = Button(self.game, (500, 600), (280, 100), 'main menu', 50)
+            next_level = Button(self.game, (500, 300), (280, 100), 'next level', 40)
+            play_again = Button(self.game, (500, 450), (280, 100), 'play again', 40)
+            main_menu = Button(self.game, (500, 600), (280, 100), 'main menu', 40)
             self.elements.add(title, next_level, play_again, main_menu)
         else:
-            play_again = Button(self.game, (500, 300), (280, 100), 'play again', 50)
-            main_menu = Button(self.game, (500, 450), (280, 100), 'main menu', 50)
+            play_again = Button(self.game, (500, 300), (280, 100), 'play again', 40)
+            main_menu = Button(self.game, (500, 450), (280, 100), 'main menu', 40)
             self.elements.add(title, play_again, main_menu)
 
 

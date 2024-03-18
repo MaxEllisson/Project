@@ -1,6 +1,6 @@
 import pymunk as pm
 import pygame as pg
-from spritess import Floor, Block, Ball, Button, PowerSlider, AngleGraphic, MusicSlider, Enemy, ShotIndicator, Label
+from sprites import Floor, Block, CannonBall, Button, PowerSlider, AngleGraphic, Enemy, ShotIndicator, Label
 from pymunk import Vec2d
 
 
@@ -33,7 +33,7 @@ class Level:
         self.enemies = pg.sprite.Group()
         self.labels = pg.sprite.Group()
         settings = Button(self.game, Vec2d(50, 25), (100, 50), 'settings', 18)
-        arrow = ShotIndicator(self.game.display, (100, 510))
+        arrow = ShotIndicator(self.game.display, (140, 510))
         self.elements.add(settings, arrow)
         slider_1 = PowerSlider(self.game.display, (60, 100), (200, 50))
         slider_2 = AngleGraphic(self.game.display, (60, 200), (200, 50))
@@ -97,26 +97,45 @@ class Level:
         Loads chosen load-out into weapons sprites group
         """
         if self.game.class_choice == 1:
-            self.weapons.add(Ball(self.game.display, Vec2d(100, 510), 10, self.space, 2, 0.5, 0.5))
-            self.weapons.add(Ball(self.game.display, Vec2d(30, 100), 10, self.space, 2, 0.5, 0.5))
-            self.weapons.add(Ball(self.game.display, Vec2d(10, 100), 10, self.space, 2, 0.5, 0.5))
+            self.weapons.add(CannonBall(self.game.display, Vec2d(140, 510), 10, self.space, 2, 0.5, 0.5))
+            self.weapons.add(CannonBall(self.game.display, Vec2d(30, 100), 20, self.space, 3, 0.5, 0.5))
+            self.weapons.add(CannonBall(self.game.display, Vec2d(10, 100), 5, self.space, 2, 0.5, 0.5))
 
         else:
-            self.weapons.add(Ball(self.game.display, Vec2d(100, 100), 10, self.space, 2, 0.5, 0.5))
-            self.weapons.add(Ball(self.game.display, Vec2d(80, 100), 10, self.space, 2, 0.5, 0.5))
-            self.weapons.add(Ball(self.game.display, Vec2d(80, 100), 10, self.space, 2, 0.5, 0.5))
+            self.weapons.add(CannonBall(self.game.display, Vec2d(140, 510), 15, self.space, 2.5, 0.5, 0.5))
+            self.weapons.add(CannonBall(self.game.display, Vec2d(50, 100), 20, self.space, 3, 0.5, 0.5))
+            self.weapons.add(CannonBall(self.game.display, Vec2d(10, 100), 18, self.space, 2, 0.5, 0.5))
 
     def load_level(self):
         """
         Loads chosen Level data into shapes and enemies sprite groups
         """
         if self.game.level_pointer == 1:
-            self.image = self.game.images['game_background']
+            self.image = self.game.images['game_background_1']
             self.image = pg.transform.scale(self.image, (1280, 720))
             floor = Floor(self.game.display, (0, 720), (1280, 720), self.space)
             blocks = [
-                (Vec2d(75, 620), (150, 200), 'static', 0),
-                (Vec2d(200, 532.5), (100, 25), 'static', 0),
+                (Vec2d(85, 620), (170, 200), 'static', 0),
+                (Vec2d(660, 520), (40, 400), 'dynamic', 0),
+                (Vec2d(700, 686), (40, 50), 'static', 0),
+                (Vec2d(860, 636), (360, 50), 'static', 0),
+                (Vec2d(1120, 682), (80, 25), 'static', -0.5),
+                (Vec2d(1180, 661), (40, 100), 'static', 0),
+                (Vec2d(110, 260), (10, 520), 'static', 0)
+
+            ]
+            enemy_1 = Enemy(self.game.display, Vec2d(660, 307.5), (25, 25), self.space)
+            enemy_2 = Enemy(self.game.display, Vec2d(780, 686), (25, 25), self.space)
+            self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
+            self.enemies.add(enemy_1, enemy_2)
+
+        elif self.game.level_pointer == 2:
+            self.image = self.game.images['game_background_2']
+            self.image = pg.transform.scale(self.image, (1280, 720))
+            floor = Floor(self.game.display, (0, 720), (1280, 720), self.space)
+            blocks = [
+                (Vec2d(85, 620), (170, 200), 'static', 0),
+                (Vec2d(220, 560), (100, 26), 'static', 0),
                 (Vec2d(370, 690), (256, 50), 'static', 0),
                 (Vec2d(600, 610), (225, 71), 'static', -0.8),
                 (Vec2d(853, 586), (85, 250), 'static', 0),
@@ -128,29 +147,11 @@ class Level:
                 (Vec2d(1024, 151), (171, 50), 'dynamic', 0),
                 (Vec2d(1152, 111), (13, 100), 'static', 0),
                 (Vec2d(1024, 47.5), (280, 25), 'static', 0),
-                (Vec2d(50, 260), (10, 520), 'static', 0)
+                (Vec2d(110, 260), (10, 520), 'static', 0)
             ]
             enemy_1 = Enemy(self.game.display, Vec2d(200, 696), (25, 25), self.space)
             enemy_2 = Enemy(self.game.display, Vec2d(1024, 86), (25, 25), self.space)
 
-            self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
-            self.enemies.add(enemy_1, enemy_2)
-
-        elif self.game.level_pointer == 2:
-            self.image = self.game.images['game_background']
-            self.image = pg.transform.scale(self.image, (1280, 720))
-            floor = Floor(self.game.display, (0, 720), (1280, 720), self.space)
-            blocks = [
-                (Vec2d(80, 620), (160, 200), 'static', 0),
-                (Vec2d(660, 520), (40, 400), 'dynamic', 0),
-                (Vec2d(700, 686), (40, 50), 'static', 0),
-                (Vec2d(860, 636), (360, 50), 'static', 0),
-                (Vec2d(1120, 682), (80, 25), 'static', -0.5),
-                (Vec2d(1180, 661), (40, 100), 'static', 0)
-
-            ]
-            enemy_1 = Enemy(self.game.display, Vec2d(660, 307.5), (25, 25), self.space)
-            enemy_2 = Enemy(self.game.display, Vec2d(780, 686), (25, 25), self.space)
             self.shapes.add(floor, (Block(self.game, *block, self.space) for block in blocks))
             self.enemies.add(enemy_1, enemy_2)
 
@@ -202,6 +203,8 @@ class Level:
         pg.mixer.music.stop()
         # insert loading new track
         # insert pg.mixer.music.play()
+        pg.mixer.music.load(self.game.soundtracks['level_music'])
+        pg.mixer.music.play()
         self.restart()
         self.game.in_game = True
         self.shot_power = 100
@@ -223,7 +226,7 @@ class Level:
                     if isinstance(elements, ShotIndicator) and not self.weapons.sprites()[0].is_shot:
                         elements.draw(self.shot_angle)
             for weapons in self.weapons:
-                if isinstance(weapons, Ball):
+                if isinstance(weapons, CannonBall):
                     weapons.draw()
             for sliders in self.sliders:
                 if isinstance(sliders, PowerSlider):
