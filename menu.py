@@ -33,6 +33,8 @@ class Menu:
         pg.mixer.music.play()
         while self.in_menu:
             self.check_events()
+            if hasattr(self, 'update_locked'):
+                self.update_locked()
             self.game.display.fill("red")
             if self.image is not None:
                 self.game.display.blit(self.image, (0, 0))
@@ -219,5 +221,3 @@ class PostGameMenu(Menu):
             play_again = Button(self.game, (500, 300), (280, 100), 'play again', 40)
             main_menu = Button(self.game, (500, 450), (280, 100), 'main menu', 40)
             self.elements.add(title, play_again, main_menu)
-
-

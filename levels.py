@@ -201,8 +201,6 @@ class Level:
         This loop handles the interactivity and drawing of the level
         """
         pg.mixer.music.stop()
-        # insert loading new track
-        # insert pg.mixer.music.play()
         pg.mixer.music.load(self.game.soundtracks['level_music'])
         pg.mixer.music.play()
         self.restart()

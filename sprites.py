@@ -13,6 +13,7 @@ class MenuComponents(pg.sprite.Sprite):
     """
     Initializes the common attributes among its children, Button and Label
     """
+
     def __init__(self, game, pos, size, text, font_size):
         """
         Parameters
@@ -45,7 +46,7 @@ class MenuComponents(pg.sprite.Sprite):
 
     def draw(self):
         """
-        virtual method which is overwritten
+        Virtual method
         """
         pass
 
@@ -54,7 +55,8 @@ class Button(MenuComponents):
     """
     Creates button objects
     """
-    def __init__(self, game, pos, size, text, font_size):
+
+    def __init__(self, game, pos, size, text, font_size, locked=False):
         """
         Parameters
         ----------
@@ -63,11 +65,14 @@ class Button(MenuComponents):
         size : Width and Height
         text : text of the button
         font_size : size of the font
+        locked: A boolean value to determine whether the next level is locked
         """
+        if locked:
+            text = 'locked'
         super().__init__(game, pos, size, text, font_size)
         self.rect = pg.Rect((self.x, self.y), (self.width, self.height))
-        self.colour = 'green'
         self.low = text.lower()
+        self.locked = locked
 
     def is_hovered(self):
         """
@@ -96,6 +101,7 @@ class Label(MenuComponents):
     """
     Creates Label objects
     """
+
     def __init__(self, game, pos, size, text, font_size):
         """
         Parameters
@@ -121,6 +127,7 @@ class Floor(pg.sprite.Sprite):
     """
     Creates the Floor of the levels
     """
+
     def __init__(self, display, start, end, space):
         super().__init__()
         self.start = start
@@ -146,6 +153,7 @@ class Block(pg.sprite.Sprite):
     """
     Creates Blocks used in the levels
     """
+
     def __init__(self, game, pos: Vec2d, size, body, angle, space):
         """
 
@@ -197,10 +205,11 @@ class Block(pg.sprite.Sprite):
             self.game.display.blit(self.image, self.block.position - (self.width // 2, self.height // 2))
 
 
-class Weapons(pg.sprite.Sprite):
+class Projectiles(pg.sprite.Sprite):
     """
     Initializes the common attributes among its children
     """
+
     def __init__(self, display, pos: Vec2d, radius, space, mass, friction, elasticity):
         super().__init__()
         self.display = display
@@ -231,7 +240,7 @@ class Weapons(pg.sprite.Sprite):
         self.body.position = Vec2d(140, 480)
 
 
-class CannonBall(Weapons):
+class CannonBall(Projectiles):
     def __init__(self, display, pos: Vec2d, radius, space, mass, friction, elasticity):
         super().__init__(display, pos, radius, space, mass, friction, elasticity)
         pg.sprite.Sprite.__init__(self)
@@ -262,6 +271,7 @@ class PowerSlider(pg.sprite.Sprite):
     """
     Creates power slider indicator
     """
+
     def __init__(self, display, pos, size):
         """
 
@@ -297,6 +307,7 @@ class AngleGraphic(pg.sprite.Sprite):
     """
     Creates Angle slider indicator
     """
+
     def __init__(self, display, pos, size):
         """
 
@@ -332,6 +343,7 @@ class Enemy(pg.sprite.Sprite):
     """
     Creates enemy sprites
     """
+
     def __init__(self, display, pos: Vec2d, size, space):
         """
 
@@ -380,6 +392,7 @@ class VolumeSlider(pg.sprite.Sprite):
     """
     Creates the Volume slider
     """
+
     def __init__(self, display, pos, size):
         """
 
@@ -427,6 +440,7 @@ class ShotIndicator(pg.sprite.Sprite):
     """
     Draws the line indicating the angle of the projectile in the levels
     """
+
     def __init__(self, display, start):
         """
 

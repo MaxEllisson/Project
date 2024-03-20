@@ -20,7 +20,9 @@ class Game:
         self.clock = pg.time.Clock()
         self.class_choice = None
         self.volume = 1
+        # Stack is initialised with the first state already on it
         self.state_stack = [1]
+        self.levels_completed = []
         self.level_pointer = None
         pg.mixer.music.set_volume(self.volume)
         self.soundtracks = {
@@ -60,13 +62,20 @@ class Game:
             8: PostGameMenu(self)
         }
 
+    def add_completed_level(self):
+        """
+        Would be used for the locked level feature
+        """
+        if self.level_pointer not in self.levels_completed:
+            self.levels_completed.append(self.level_pointer)
+
     def change_state(self, state):
         """
         Parameters
         ----------
         state : An integer representing the index of our state dictionary (self.states)
 
-        This method pushes the passed state onto the state manager stack (self.state_stack)
+        This method pushes the current state onto the state manager stack (self.state_stack)
 
         """
         self.state_stack.append(state)
