@@ -17,7 +17,6 @@ class Menu:
         self.game = game
         self.in_menu = True
         self.elements = pg.sprite.Group()
-        self.image = None
         self.music = None
         self.volume = self.game.volume
         self.image = self.game.images['menu_background']
@@ -118,11 +117,11 @@ class StartMenu(Menu):
         Creates the Buttons and Labels of the Main Menu
         """
         super().__init__(game)
-        button = Button(self.game, (540, 410), (200, 100), 'play', 40)
-        label = Label(self.game, (540, 100), (200, 100), 'PMPG', 50)
+        title = Label(self.game, (540, 100), (200, 100), 'PMPG', 50)
+        play = Button(self.game, (540, 410), (200, 100), 'play', 40)
         end = Button(self.game, (540, 560), (200, 100), 'quit', 40)
         options = Button(self.game, (50, 600), (250, 100), 'options', 40)
-        self.elements.add(button, label, end, options)
+        self.elements.add(title, play, end, options)
 
 
 class LevelMenu(Menu):
@@ -135,11 +134,11 @@ class LevelMenu(Menu):
         Creates the Buttons and Labels of the Main Menu
         """
         super().__init__(game)
+        title = Label(self.game, (540, 100), (200, 100), 'Levels', 50)
         level1 = Button(self.game, (540, 410), (200, 100), 'Level 1', 40)
         level2 = Button(self.game, (540, 560), (200, 100), 'Level 2', 40)
-        levels = Label(self.game, (540, 100), (200, 100), 'Levels', 50)
         back = Button(self.game, (50, 600), (250, 100), 'back', 40)
-        self.elements.add(level1, level2, levels, back)
+        self.elements.add(title, level1, level2, back)
 
 
 class OptionsMenu(Menu):

@@ -26,8 +26,10 @@ class Game:
         self.level_pointer = None
         pg.mixer.music.set_volume(self.volume)
         self.soundtracks = {
-            'menu_music': os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks", 'menumusic.mp3'),
-            'level_music': os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks", 'levelmusic.mp3')
+            'menu_music': os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
+                                       'menumusic.mp3'),
+            'level_music': os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "soundtracks",
+                                        'levelmusic.mp3')
         }
         self.images = {
             'game_background_1': pg.image.load(
@@ -51,7 +53,6 @@ class Game:
 
         }
 
-        self.state = 1
         self.states = {
             1: StartMenu(self),
             2: LevelMenu(self),

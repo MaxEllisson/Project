@@ -8,6 +8,9 @@ from pymunk import pygame_util
 import os
 from pymunk import Vec2d
 
+# lets Pymunk know that increasing y coordinate moves down towards bottom of the screen
+pm.pygame_util.positive_y_is_up = False
+
 
 class MenuComponents(pg.sprite.Sprite):
     """
@@ -25,9 +28,8 @@ class MenuComponents(pg.sprite.Sprite):
         font_size : size of the font
         """
         super().__init__()
-        self.pos = None
         self.display = game.display
-        self.colour = (255, 255, 255)
+        self.colour = 'white'
         self.x, self.y = pos
         self.width, self.height = size
         self.font_size = font_size
@@ -133,12 +135,12 @@ class Floor(pg.sprite.Sprite):
         self.start = start
         self.end = end
         self.display = display
-        self.base = pm.Body(body_type=pm.Body.STATIC)
-        self.base_shape = pm.Segment(self.base, self.start, self.end, 9)
-        self.base_shape.mass = 2
-        self.base_shape.elasticity = 0.5
-        self.base_shape.friction = 0.7
-        space.add(self.base, self.base_shape)
+        self.body = pm.Body(body_type=pm.Body.STATIC)
+        self.body_shape = pm.Segment(self.body, self.start, self.end, 9)
+        self.body_shape.mass = 2
+        self.body_shape.elasticity = 0.5
+        self.body_shape.friction = 0.7
+        space.add(self.body, self.body_shape)
 
     def draw(self):
         """
@@ -171,22 +173,24 @@ class Block(pg.sprite.Sprite):
         self.width, self.height = size
         self.display = game.display
         if body == 'dynamic':
-            self.block = pm.Body(body_type=pm.Body.DYNAMIC)
+            self.body = pm.Body(body_type=pm.Body.DYNAMIC)
+            # How I would add the dynamic images if they worked
             # self.image = game.images['block_dynamic_image']
             # self.image = pg.transform.scale(self.image, (self.width, self.height))
         elif body == 'static':
-            self.block = pm.Body(body_type=pm.Body.STATIC)
+            self.body = pm.Body(body_type=pm.Body.STATIC)
+            # How I would add the static images if they worked
             # self.image = game.images['block_static_image']
             # self.image = pg.transform.scale(self.image, (self.width, self.height))
-        self.block.position = pos
-        self.block.angle = angle
+        self.body.position = pos
+        self.body.angle = angle
         # creates the shape of the block around its centre of gravity which is originally (0, 0)
-        self.block_shape = pm.Poly.create_box(self.block, (self.width, self.height))
-        self.corners = self.block_shape.get_vertices()
-        self.block_shape.mass = 2
-        self.block_shape.elasticity = 0.5
-        self.block_shape.friction = 0.7
-        space.add(self.block, self.block_shape)
+        self.body_shape = pm.Poly.create_box(self.body, (self.width, self.height))
+        self.corners = self.body_shape.get_vertices()
+        self.body_shape.mass = 2
+        self.body_shape.elasticity = 0.5
+        self.body_shape.friction = 0.7
+        space.add(self.body, self.body_shape)
 
     def draw(self):
         """
@@ -196,13 +200,13 @@ class Block(pg.sprite.Sprite):
         # This for loop translates the corners of the block so that it is no longer drawn around (0, 0) and instead drawn around its position
         # The for loop also allows the blocks to be rotated
         for point in self.corners:
-            updated_point = (point.rotated(self.block_shape.body.angle) + self.block.position)
+            updated_point = (point.rotated(self.body_shape.body.angle) + self.body.position)
             vertex.append(pygame_util.to_pygame(updated_point, self.game.display))
 
         pg.draw.polygon(self.game.display, 'blue', vertex)
         if hasattr(self, 'image'):
-            self.image = pg.transform.rotate(self.image, math.degrees(self.block.angle))
-            self.game.display.blit(self.image, self.block.position - (self.width // 2, self.height // 2))
+            self.image = pg.transform.rotate(self.image, math.degrees(self.body.angle))
+            self.game.display.blit(self.image, self.body.position - (self.width // 2, self.height // 2))
 
 
 class Projectiles(pg.sprite.Sprite):
@@ -226,6 +230,7 @@ class Projectiles(pg.sprite.Sprite):
         self.is_shot = False
         self.time_after_collision = 0
         self.body_shape.collision_type = 1
+        self.power_factor = 7
 
     def remove(self):
         """
@@ -263,7 +268,7 @@ class CannonBall(Projectiles):
         Sets is_shot to True after launching projectile
         """
         self.body.angle = math.radians(shot_angle)
-        self.body.apply_impulse_at_local_point(7 * shot_power * Vec2d(1, 0))
+        self.body.apply_impulse_at_local_point(self.power_factor * shot_power * Vec2d(1, 0))
         self.is_shot = True
 
 

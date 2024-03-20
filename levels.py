@@ -16,7 +16,6 @@ class Level:
         """
         self.enemy_list = None
         self.current_weapon = None
-        self.times = 0
         self.background = None
         self.shot_power = 0
         self.shot_angle = 0
@@ -102,7 +101,7 @@ class Level:
             self.weapons.add(CannonBall(self.game.display, Vec2d(10, 100), 5, self.space, 2, 0.5, 0.5))
 
         else:
-            self.weapons.add(CannonBall(self.game.display, Vec2d(140, 510), 15, self.space, 2.5, 0.5, 0.5))
+            self.weapons.add(CannonBall(self.game.display, Vec2d(140, 510), 15, self.space, 2.5, 0, 0.5))
             self.weapons.add(CannonBall(self.game.display, Vec2d(50, 100), 20, self.space, 3, 0.5, 0.5))
             self.weapons.add(CannonBall(self.game.display, Vec2d(10, 100), 18, self.space, 2, 0.5, 0.5))
 
